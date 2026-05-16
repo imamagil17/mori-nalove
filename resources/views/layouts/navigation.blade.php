@@ -24,6 +24,10 @@
                         <x-nav-link :href="route('admin.notifications.index')" :active="request()->routeIs('admin.notifications.*')" class="text-slate-600 font-semibold hover:text-blue-600 transition-colors">
                             {{ __('Log Notifikasi') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('admin.berita.index')" :active="request()->routeIs('admin.berita.*')" class="text-slate-600 font-semibold hover:text-blue-600 transition-colors">
+                            {{ __('Kelola Berita') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -87,6 +91,10 @@
 
                 <x-responsive-nav-link :href="route('admin.notifications.index')" :active="request()->routeIs('admin.notifications.*')">
                     {{ __('Log Notifikasi') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.berita.index')" :active="request()->routeIs('admin.berita.*')">
+                    {{ __('Kelola Berita') }}
                 </x-responsive-nav-link>
             @endif
         </div>

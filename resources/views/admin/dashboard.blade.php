@@ -10,9 +10,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-20">
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 
-                <!-- KOLOM KIRI (Kamera & Simulasi) -->
                 <div class="xl:col-span-1 space-y-8">
-                    <!-- Kamera Card -->
                     <div class="bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col relative overflow-hidden group">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-10 group-hover:bg-blue-100 transition-colors"></div>
                         <div class="flex items-center gap-3 mb-5">
@@ -35,14 +33,11 @@
 
                 </div>
 
-                <!-- KOLOM KANAN (Weather, AI Insights, Chart) -->
                 <div class="xl:col-span-2 space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Weather Widget -->
                         <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-6 shadow-md text-white flex flex-col justify-between relative overflow-hidden group">
                             <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
                             
-                            <!-- Loading State -->
                             <div id="weatherSkeleton" class="animate-pulse flex flex-col h-full justify-between">
                                 <div class="h-6 bg-white/20 rounded w-1/2 mb-4"></div>
                                 <div class="flex gap-4 items-end">
@@ -51,7 +46,6 @@
                                 </div>
                             </div>
 
-                            <!-- Real Content -->
                             <div id="weatherContent" class="hidden h-full flex flex-col justify-between relative z-10">
                                 <div class="flex justify-between items-start">
                                     <h3 class="text-sm font-semibold text-blue-100 tracking-wider uppercase flex items-center gap-2">
@@ -69,11 +63,9 @@
                             </div>
                         </div>
 
-                        <!-- AI Insights Widget -->
                         <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-6 shadow-md text-white flex flex-col justify-between relative overflow-hidden transition-colors duration-500" id="aiInsightsCard">
                             <div class="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
                             
-                            <!-- Loading State -->
                             <div id="aiSkeleton" class="animate-pulse flex flex-col h-full justify-between">
                                 <div class="flex justify-between mb-4">
                                     <div class="h-6 bg-white/20 rounded w-1/2"></div>
@@ -85,7 +77,6 @@
                                 </div>
                             </div>
 
-                            <!-- Real Content -->
                             <div id="aiContent" class="hidden h-full flex flex-col justify-between relative z-10">
                                 <div class="flex justify-between items-start">
                                     <h3 class="text-sm font-semibold text-white/80 tracking-wider uppercase flex items-center gap-2">
@@ -113,7 +104,6 @@
                         </div>
                     </div>
 
-                    <!-- Chart Card -->
                     <div class="bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col h-96 relative group">
                         <div class="flex justify-between items-center mb-6">
                             <div class="flex items-center gap-3">
@@ -128,7 +118,6 @@
                             </button>
                         </div>
 
-                        <!-- Skeleton Chart -->
                         <div id="chartSkeleton" class="absolute inset-0 top-20 bottom-6 left-6 right-6 animate-pulse flex items-end justify-between gap-2 pb-8">
                             <div class="w-full bg-slate-200 rounded-t h-1/4"></div>
                             <div class="w-full bg-slate-200 rounded-t h-1/3"></div>
@@ -146,10 +135,84 @@
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="mt-8 bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
+                            <i data-lucide="newspaper" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 tracking-tight">Preview Berita Publik</h3>
+                    </div>
+                    <a href="{{ route('admin.berita.index') }}" class="px-4 py-2 text-xs font-bold bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-xl flex items-center gap-2 transition-colors">
+                        Kelola Berita <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="flex overflow-x-auto gap-5 pb-4 snap-x snap-mandatory hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    
+                    @forelse($beritas as $berita)
+                    <div class="min-w-[280px] max-w-[280px] snap-start bg-[#f4f9ff] rounded-3xl overflow-hidden shadow-sm border border-blue-100/50 flex flex-col group cursor-pointer hover:shadow-md transition-shadow">
+                        <div class="relative h-44 overflow-hidden bg-slate-200 flex shrink-0">
+                            @if($berita->foto)
+                                <img src="{{ asset('storage/' . $berita->foto) }}" alt="Foto Berita" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                    <i data-lucide="image" class="w-10 h-10"></i>
+                                </div>
+                            @endif
+                            
+                            <div class="absolute top-3 left-3 bg-[#2a3449] text-white text-[11px] font-semibold px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm bg-opacity-90">
+                                {{ $berita->created_at->format('d M Y') }}
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow justify-between bg-[#f4f9ff]">
+                            <h4 class="font-bold text-slate-800 text-[15px] leading-snug line-clamp-3 mb-4">
+                                {{ $berita->judul }}
+                            </h4>
+                            
+                            <div id="konten-berita-{{ $berita->id }}" class="hidden">{{ $berita->konten }}</div>
+                            <button onclick="bukaModalBerita('{{ $berita->id }}', '{{ addslashes($berita->judul) }}', '{{ $berita->created_at->format('d M Y') }}', '{{ $berita->foto ? asset('storage/'.$berita->foto) : '' }}')" class="text-amber-500 font-bold text-sm flex items-center justify-end gap-1.5 hover:text-amber-600 transition-colors w-full text-right mt-2 focus:outline-none">
+                                Selengkapnya <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="w-full bg-slate-50 border border-dashed border-slate-200 rounded-3xl p-8 text-center flex flex-col items-center justify-center">
+                        <i data-lucide="newspaper" class="w-10 h-10 text-slate-300 mb-3"></i>
+                        <p class="text-slate-500 font-medium text-sm">Belum ada berita. Tambahkan berita di menu "Kelola Berita".</p>
+                    </div>
+                    @endforelse
+
+                </div>
+            </div>
+            </div>
     </div>
 
-    <!-- Floating Chatbot Widget -->
+    <div id="modalBerita" class="fixed inset-0 z-[100] hidden bg-slate-900/80 backdrop-blur-sm flex-col items-center justify-center p-4 md:p-8 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh] transform scale-95 transition-transform duration-300" id="modalBeritaContent">
+            
+            <div class="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> <span id="modalBeritaTanggal"></span>
+                    </span>
+                    <span class="text-slate-400 text-sm font-medium hidden md:inline-block">— Biro Komunikasi Flood-Vision</span>
+                </div>
+                <button onclick="tutupModalBerita()" class="p-2 bg-slate-200 hover:bg-red-100 hover:text-red-600 text-slate-500 rounded-full transition-colors focus:outline-none">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto p-6 md:p-10 custom-scrollbar bg-white">
+                <img id="modalBeritaFoto" src="" class="w-full h-64 md:h-96 object-cover rounded-2xl mb-8 shadow-sm hidden" alt="Foto Berita">
+                
+                <h2 id="modalBeritaJudul" class="text-3xl md:text-4xl font-black text-slate-800 mb-8 leading-tight"></h2>
+                
+                <div id="modalBeritaDeskripsi" class="text-slate-800 text-[16px] md:text-[17px] leading-loose whitespace-pre-wrap font-normal text-justify"></div>
+            </div>
+        </div>
+    </div>
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="chatWindow" class="hidden w-80 lg:w-96 h-[28rem] mb-4 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/60 flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 text-white flex justify-between items-center shadow-md">
@@ -192,21 +255,16 @@
         </button>
     </div>
 
-    <!-- HUD Camera Modal -->
     <div id="cameraModal" class="fixed inset-0 z-[60] hidden bg-black/90 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-300">
-        <!-- Close Button -->
         <button id="closeCameraModal" class="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-md z-[70]">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
         
-        <!-- Modal Content -->
         <div class="w-full max-w-5xl px-4 relative flex flex-col items-center">
-            <!-- Glassmorphism Frame -->
             <div class="relative w-full aspect-[4/3] md:aspect-video rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(37,99,235,0.2)] border border-white/10 bg-slate-900 ring-1 ring-white/20">
                 <video id="videoInput" style="display:none" autoplay playsinline muted></video>
                 <canvas id="canvasOutput" class="w-full h-full object-cover"></canvas>
                 
-                <!-- Placeholder if loading -->
                 <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none bg-slate-900" id="cameraPlaceholder">
                     <i data-lucide="loader-2" class="w-12 h-12 text-blue-500 animate-spin mb-4"></i>
                     <p class="text-blue-300 font-medium tracking-widest uppercase text-sm animate-pulse">Initializing OpenCV Tracking...</p>
@@ -216,8 +274,12 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <!-- Lucide Icons -->
+    <style>
+        /* Menyembunyikan scrollbar untuk slider berita */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -233,7 +295,6 @@
     <script src="{{ asset('js/camera.js') }}"></script>
     <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();"></script>
     
-    <!-- Auto-Refresh, Chart & AI Logic -->
     <script>
         let waterChart;
         let globalContext = "Level: --, Status: --, Risk Score: --";
@@ -366,20 +427,6 @@
                                     }
                                 }
                             }
-                        },
-                        scales: {
-                            y: { 
-                                min: 0, 
-                                max: 100, 
-                                grid: { color: '#f1f5f9', borderDash: [5, 5] },
-                                border: { display: false },
-                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif" }, color: '#64748b' }
-                            },
-                            x: { 
-                                grid: { display: false },
-                                border: { display: false },
-                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif" }, color: '#64748b' }
-                            }
                         }
                     }
                 });
@@ -461,6 +508,51 @@
             lucide.createIcons();
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        // 👇 SCRIPT POP-UP BERITA 👇
+        function bukaModalBerita(id, judul, tanggal, fotoUrl) {
+            document.getElementById('modalBeritaJudul').innerText = judul;
+            document.getElementById('modalBeritaTanggal').innerText = tanggal;
+            
+            // Ambil konten dari div tersembunyi
+            const kontenText = document.getElementById('konten-berita-' + id).innerText;
+            document.getElementById('modalBeritaDeskripsi').innerText = kontenText;
+
+            const fotoEl = document.getElementById('modalBeritaFoto');
+            if(fotoUrl) {
+                fotoEl.src = fotoUrl;
+                fotoEl.classList.remove('hidden');
+            } else {
+                fotoEl.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Animasi masuk
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+            lucide.createIcons();
+        }
+
+        function tutupModalBerita() {
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            // Tunggu animasi selesai baru di-hide
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+        // 👆 AKHIR SCRIPT POP-UP BERITA 👆
 
         // Intercept Classification logic for animated pulse on status
         const originalStatusTextUpdate = document.getElementById('statusText');
