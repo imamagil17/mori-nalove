@@ -26,11 +26,23 @@ class WaterLevelLogController extends Controller
         // 1. Validasi input (berlaku untuk manual maupun otomatis dari JavaScript)
         $request->validate([
             'water_level' => 'required|numeric|min:0|max:100',
+            'foto_visual' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         // 2. Simpan data ketinggian air ke database
         $log = new WaterLevelLog();
         $log->water_level = $request->water_level;
+
+        // Proses unggah file gambar visual jika ada
+        if ($request->hasFile('foto_visual')) {
+            $file = $request->file('foto_visual');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            // Menyimpan ke public/water_logs/
+            $file->move(public_path('water_logs'), $filename);
+            // Simpan path ke database
+            $log->foto_visual = 'water_logs/' . $filename;
+        }
+
         $log->save();
 
         // 3. Setup Token & Chat ID Telegram
@@ -43,7 +55,7 @@ class WaterLevelLogController extends Controller
         // KONDISI 1: STATUS KUNING (Rentang 50% sampai 79.9%)
         if ($request->water_level >= 50 && $request->water_level < 80) {
             $message = "⚠️ [PERINGATAN STATUS KUNING - SIAGA]\n";
-            $message .= "Sistem Flood-Vision mendeteksi kenaikan air sungai.\n\n";
+            $message .= "Sistem Mitigasi Banjir Cerdas mendeteksi kenaikan air sungai.\n\n";
             $message .= "• Ketinggian Air: " . $request->water_level . "%\n";
             $message .= "• Status Keamanan: SIAGA (KUNING)\n";
             $message .= "• Waktu Kejadian: " . now()->format('d M Y, H:i') . " WITA\n\n";

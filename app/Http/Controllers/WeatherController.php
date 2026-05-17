@@ -33,7 +33,7 @@ class WeatherController extends Controller
                         'humidity' => $current['relative_humidity_2m'],
                         'description' => $description,
                         'icon' => 'default', // Lucide icons don't use this directly, handled in frontend if needed
-                        'city' => 'Palu'
+                        'city' => 'Lokasi Pantau'
                     ]
                 ]);
             }
@@ -49,7 +49,7 @@ class WeatherController extends Controller
                     'humidity' => 65,
                     'description' => 'Cerah Berawan',
                     'icon' => 'default',
-                    'city' => 'Palu (Dummy)'
+                    'city' => 'Lokasi (Dummy)'
                 ]
             ]);
         }

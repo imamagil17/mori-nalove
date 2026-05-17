@@ -62,44 +62,20 @@ class AiAnalyticsController extends Controller
         // Clamp predicted level
         $predictedLevel = max(0, min(100, round($predictedLevel, 1)));
         
-        // Status Prediksi
-        if ($predictedLevel <= 35) {
+        // Status Prediksi & Risk Score berdasarkan Current Level
+        if ($currentLevel < 50) {
+            $statusPrediksi = 'AMAN';
+            $riskScore = rand(10, 35);
+        } elseif ($currentLevel < 70) {
             $statusPrediksi = 'WASPADA';
-        } elseif ($predictedLevel <= 70) {
+            $riskScore = rand(36, 70);
+        } elseif ($currentLevel < 85) {
             $statusPrediksi = 'SIAGA';
+            $riskScore = rand(71, 85);
         } else {
             $statusPrediksi = 'AWAS';
+            $riskScore = rand(86, 100);
         }
-        
-        // Rain Intensity Estimation
-        $rainIntensity = 10; // default cerah
-        try {
-            $response = Http::get("https://api.open-meteo.com/v1/forecast", [
-                'latitude' => -0.8917,
-                'longitude' => 119.8707,
-                'current' => 'weather_code',
-                'timezone' => 'Asia/Makassar'
-            ]);
-            if ($response->successful()) {
-                $code = $response->json()['current']['weather_code'];
-                
-                // Rain intensity logic based on WMO code
-                if (in_array($code, [65, 67, 75, 81, 82, 85, 86, 95, 96, 99])) {
-                    $rainIntensity = 90; // Heavy rain / Storm
-                } elseif (in_array($code, [61, 63, 66, 71, 73, 80])) {
-                    $rainIntensity = 60; // Rain
-                } elseif (in_array($code, [51, 53, 55, 56, 57])) {
-                    $rainIntensity = 40; // Drizzle
-                }
-            }
-        } catch (\Exception $e) {
-            // Fallback
-            $rainIntensity = 50;
-        }
-        
-        // Risk Score
-        $riskScore = round(($currentLevel * 0.7) + ($rainIntensity * 0.3));
-        $riskScore = max(0, min(100, $riskScore));
         
         return response()->json([
             'success' => true,

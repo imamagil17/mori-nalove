@@ -22,7 +22,7 @@ class NotificationLogController extends Controller
         $token = env('TELEGRAM_BOT_TOKEN');
         $chatId = env('TELEGRAM_CHAT_ID');
         
-        $message = "🤖 [SISTEM TEST] \nHalo warga Kota Palu! Sistem Flood-Vision berjalan dengan normal. Bot mitigasi telah aktif dan siap memantau ketinggian air 24/7.";
+        $message = "🤖 [SISTEM TEST] \nPengujian Sistem Mitigasi Banjir Cerdas berjalan dengan normal. Bot mitigasi telah aktif dan siap memantau ketinggian air 24/7.";
 
         try {
             // ->withoutVerifying() digunakan untuk menembus blokir SSL di localhost XAMPP

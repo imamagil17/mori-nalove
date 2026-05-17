@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-extrabold text-2xl text-slate-800 leading-tight flex items-center gap-2">
             <i data-lucide="map-pin" class="w-6 h-6 text-blue-600"></i>
-            {{ __('Flood-Vision — Informasi Banjir Palu') }}
+            {{ __('Flood-Vision — Sistem Mitigasi Banjir Cerdas') }}
         </h2>
     </x-slot>
 
@@ -12,13 +12,13 @@
                 
                 <div class="xl:col-span-1 space-y-6">
 
-                    <div class="bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col relative overflow-hidden group" id="floodStatusCard">
+                    <div class="bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 flex flex-col relative overflow-hidden group transition-all duration-500" id="floodStatusCard">
                         <div class="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full blur-3xl -z-10 group-hover:bg-blue-100 transition-colors"></div>
                         <div class="flex items-center gap-3 mb-5">
                             <div class="p-2 bg-blue-100 text-blue-600 rounded-xl">
                                 <i data-lucide="shield-alert" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-800 tracking-tight">Status Banjir Palu</h3>
+                            <h3 class="text-lg font-bold text-slate-800 tracking-tight">Status Mitigasi Banjir Cerdas</h3>
                             <span class="ml-auto flex h-2.5 w-2.5 relative">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
@@ -69,7 +69,7 @@
                             </li>
                             <li class="flex items-start gap-3 text-sm">
                                 <span class="mt-0.5 w-5 h-5 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 text-xs font-bold">3</span>
-                                <span class="text-slate-600">Hubungi BPBD Kota Palu: <strong class="text-slate-800">0451-421-396</strong></span>
+                                <span class="text-slate-600">Hubungi BPBD Setempat: <strong class="text-slate-800">0451-421-396</strong></span>
                             </li>
                             <li class="flex items-start gap-3 text-sm">
                                 <span class="mt-0.5 w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 text-xs font-bold">!</span>
@@ -116,7 +116,7 @@
                                     <h3 class="text-sm font-semibold text-blue-100 tracking-wider uppercase flex items-center gap-2">
                                         <i data-lucide="cloud" class="w-4 h-4"></i> Cuaca Saat Ini
                                     </h3>
-                                    <span class="bg-white/20 px-2 py-1 rounded text-xs font-bold backdrop-blur-sm" id="weatherCity">Palu</span>
+                                    <span class="bg-white/20 px-2 py-1 rounded text-xs font-bold backdrop-blur-sm" id="weatherCity">Lokasi</span>
                                 </div>
                                 <div class="flex items-end gap-3 mt-4">
                                     <span class="text-6xl font-black tracking-tighter drop-shadow-sm" id="weatherTemp">--°</span>
@@ -218,8 +218,87 @@
 
                 </div>
             </div>
+
+            <!-- NEWS SECTION START -->
+            <div class="mt-8 bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 relative z-10">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-100/80 text-indigo-600 rounded-xl backdrop-blur-sm">
+                            <i data-lucide="newspaper" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 tracking-tight">Preview Berita Publik</h3>
+                    </div>
+                </div>
+
+                <div class="flex overflow-x-auto gap-5 pb-4 snap-x snap-mandatory hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    
+                    @forelse($beritas ?? [] as $berita)
+                    <div class="min-w-[280px] max-w-[280px] snap-start bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden shadow-sm border border-white/50 flex flex-col group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="relative h-44 overflow-hidden bg-slate-200/50 flex shrink-0">
+                            @if($berita->foto)
+                                <img src="{{ asset('storage/' . $berita->foto) }}" alt="Foto Berita" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                    <i data-lucide="image" class="w-10 h-10 opacity-50"></i>
+                                </div>
+                            @endif
+                            
+                            <div class="absolute top-3 left-3 bg-slate-900/70 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full shadow-sm backdrop-blur-md">
+                                {{ $berita->created_at->format('d M Y') }}
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow justify-between relative z-10">
+                            <h4 class="font-bold text-slate-800 text-[15px] leading-snug line-clamp-3 mb-4 group-hover:text-blue-600 transition-colors">
+                                {{ $berita->judul }}
+                            </h4>
+                            
+                            <div id="konten-berita-{{ $berita->id }}" class="hidden">{{ $berita->konten }}</div>
+                            <button onclick="bukaModalBerita('{{ $berita->id }}', '{{ addslashes($berita->judul) }}', '{{ $berita->created_at->format('d M Y') }}', '{{ $berita->foto ? asset('storage/'.$berita->foto) : '' }}')" class="text-amber-500 font-bold text-sm flex items-center justify-end gap-1.5 hover:text-amber-600 transition-colors w-full text-right mt-2 focus:outline-none">
+                                Selengkapnya <i data-lucide="arrow-right-circle" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="w-full bg-white/40 backdrop-blur-md border border-dashed border-slate-300 rounded-3xl p-8 text-center flex flex-col items-center justify-center">
+                        <i data-lucide="newspaper" class="w-10 h-10 text-slate-300 mb-3"></i>
+                        <p class="text-slate-500 font-medium text-sm">Belum ada berita dirilis oleh Admin Sistem Mitigasi Banjir Cerdas.</p>
+                    </div>
+                    @endforelse
+
+                </div>
+            </div>
+            <!-- NEWS SECTION END -->
+
+        </div>
         </div>
     </div>
+
+    <!-- MODAL BERITA START -->
+    <div id="modalBerita" class="fixed inset-0 z-[100] hidden bg-slate-900/80 backdrop-blur-md flex-col items-center justify-center p-4 md:p-8 transition-opacity duration-300 opacity-0">
+        <div class="bg-white/90 backdrop-blur-xl rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh] transform scale-95 transition-transform duration-300 border border-white/20" id="modalBeritaContent">
+            
+            <div class="flex justify-between items-center p-5 border-b border-slate-200/50 bg-slate-50/50">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100/80 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> <span id="modalBeritaTanggal"></span>
+                    </span>
+                    <span class="text-slate-400 text-sm font-medium hidden md:inline-block">— Sistem Mitigasi Banjir Cerdas</span>
+                </div>
+                <button onclick="tutupModalBerita()" class="p-2 bg-slate-200/80 hover:bg-red-100 hover:text-red-600 text-slate-500 rounded-full transition-colors focus:outline-none backdrop-blur-sm">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto p-6 md:p-10 custom-scrollbar bg-transparent">
+                <img id="modalBeritaFoto" src="" class="w-full h-64 md:h-96 object-cover rounded-2xl mb-8 shadow-md hidden" alt="Foto Berita">
+                
+                <h2 id="modalBeritaJudul" class="text-3xl md:text-4xl font-black text-slate-800 mb-8 leading-tight"></h2>
+                
+                <div id="modalBeritaDeskripsi" class="text-slate-700 text-[16px] md:text-[17px] leading-loose whitespace-pre-wrap font-normal text-justify"></div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL BERITA END -->
 
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="chatWindow" class="hidden w-80 lg:w-96 h-[28rem] mb-4 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/60 flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right">
@@ -229,7 +308,7 @@
                         <i data-lucide="bot" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm leading-tight">Gemini Assistant</h4>
+                        <h4 class="font-bold text-sm leading-tight">Flood Vision Assistant - Sistem Mitigasi Banjir Cerdas</h4>
                         <p class="text-[10px] text-blue-100 font-medium tracking-wider uppercase">AI Ready</p>
                     </div>
                 </div>
@@ -243,7 +322,7 @@
                         <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
                     </div>
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm text-slate-700 border border-slate-100 leading-relaxed">
-                        Halo! Saya AI Assistant Flood Vision. Berdasarkan data saat ini, adakah yang bisa saya bantu terkait mitigasi?
+                        Halo! Saya Flood Vision Assistant - Sistem Mitigasi Banjir Cerdas. Berdasarkan data saat ini, adakah yang bisa saya bantu terkait mitigasi?
                     </div>
                 </div>
             </div>
@@ -293,7 +372,7 @@
                     <h3 class="text-xl font-bold flex items-center gap-2">
                         <i data-lucide="map-pin" class="w-5 h-5"></i> Peta Jalur & Titik Evakuasi
                     </h3>
-                    <p class="text-blue-100 text-sm mt-1">Gunakan peta ini untuk mencari rute teraman menuju Kantor BPBD Kota Palu atau lapangan terbuka terdekat.</p>
+                    <p class="text-blue-100 text-sm mt-1">Gunakan peta ini untuk mencari rute teraman menuju Kantor BPBD Setempat atau lapangan terbuka terdekat.</p>
                 </div>
                 
                 <div class="w-full h-[60vh] bg-slate-100 relative">
@@ -301,7 +380,7 @@
                         <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
                     </div>
                     <iframe 
-                        src="https://www.google.com/maps?q=Kantor+BPBD+Kota+Palu&output=embed" 
+                        src="https://www.google.com/maps?q=Kantor+BPBD&output=embed" 
                         class="relative z-10 w-full h-full" 
                         style="border:0;" 
                         allowfullscreen="" 
@@ -657,7 +736,7 @@
                 desc.textContent         = 'Bahaya! Segera evakuasi ke tempat aman.';
                 bar.style.background     = 'linear-gradient(90deg,#ef4444,#b91c1c)';
                 document.getElementById('floodStatusCard').className =
-                    'bg-red-50/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-red-200/60 flex flex-col relative overflow-hidden group transition-colors duration-500';
+                    'bg-red-500/10 backdrop-blur-md rounded-3xl p-6 shadow-[0_0_30px_rgba(239,68,68,0.3)] border border-red-500/30 flex flex-col relative overflow-hidden group transition-all duration-500';
             } else if (status === 'SIAGA' || level > 35) {
                 icon.style.background    = 'linear-gradient(135deg,#f59e0b,#d97706)';
                 icon.innerHTML           = '<i data-lucide="alert-circle" class="w-10 h-10"></i>';
@@ -666,7 +745,7 @@
                 desc.textContent         = 'Waspada! Pantau kondisi dan bersiap evakuasi.';
                 bar.style.background     = 'linear-gradient(90deg,#f59e0b,#d97706)';
                 document.getElementById('floodStatusCard').className =
-                    'bg-amber-50/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-amber-200/60 flex flex-col relative overflow-hidden group transition-colors duration-500';
+                    'bg-amber-500/10 backdrop-blur-md rounded-3xl p-6 shadow-[0_0_30px_rgba(245,158,11,0.3)] border border-amber-500/30 flex flex-col relative overflow-hidden group transition-all duration-500';
             } else {
                 icon.style.background    = 'linear-gradient(135deg,#10b981,#059669)';
                 icon.innerHTML           = '<i data-lucide="check-circle" class="w-10 h-10"></i>';
@@ -675,9 +754,49 @@
                 desc.textContent         = 'Kondisi air normal. Tidak perlu khawatir.';
                 bar.style.background     = 'linear-gradient(90deg,#10b981,#059669)';
                 document.getElementById('floodStatusCard').className =
-                    'bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col relative overflow-hidden group transition-colors duration-500';
+                    'bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 flex flex-col relative overflow-hidden group transition-all duration-500';
             }
             lucide.createIcons();
+        }
+
+        function bukaModalBerita(id, judul, tanggal, fotoUrl) {
+            document.getElementById('modalBeritaJudul').innerText = judul;
+            document.getElementById('modalBeritaTanggal').innerText = tanggal;
+            
+            const kontenText = document.getElementById('konten-berita-' + id).innerText;
+            document.getElementById('modalBeritaDeskripsi').innerText = kontenText;
+
+            const fotoEl = document.getElementById('modalBeritaFoto');
+            if(fotoUrl) {
+                fotoEl.src = fotoUrl;
+                fotoEl.classList.remove('hidden');
+            } else {
+                fotoEl.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+            lucide.createIcons();
+        }
+
+        function tutupModalBerita() {
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
         }
 
         const _origAiFetch = window._origAiFetch;

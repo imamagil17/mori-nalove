@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flood-Vision | Sistem Mitigasi Banjir Cerdas</title>
+    <title>{{ config('app.name', 'Flood-Vision') }} | Sistem Mitigasi Banjir Cerdas</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -11,6 +14,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 <body class="antialiased bg-slate-50 text-slate-800 min-h-screen flex flex-col font-[Figtree] relative overflow-x-hidden">
 
@@ -46,7 +54,7 @@
         
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-8 shadow-sm">
             <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
-            Sistem Aktif & Memantau Palu
+            Sistem Aktif & Memantau Lokasi
         </div>
         
         <h1 class="text-5xl md:text-7xl font-extrabold text-slate-800 mb-6 leading-tight tracking-tight">
@@ -55,7 +63,7 @@
         </h1>
         
         <p class="text-lg md:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
-            Sistem mitigasi dini terintegrasi <b>Computer Vision</b> dan <b>AI</b> untuk mengamankan wilayah Kota Palu. Pantau level air, cuaca, and prediksi risiko dalam satu platform modern.
+            Sistem mitigasi dini terintegrasi <b>Computer Vision</b> dan <b>AI</b> sebagai wujud Sistem Mitigasi Banjir Cerdas. Pantau level air, cuaca, and prediksi risiko dalam satu platform modern.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 mb-16">
@@ -165,10 +173,10 @@
                     <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Fokus Lokasi Pemantauan
                 </div>
                 <h2 class="text-3xl md:text-4xl font-black text-slate-800 leading-tight">
-                    Mengamankan Bantaran <br>Sungai Wilayah Kota Palu
+                    Sistem Mitigasi Banjir Cerdas <br>Untuk Mengamankan Bantaran Sungai
                 </h2>
                 <p class="text-slate-600 leading-relaxed text-sm md:text-base">
-                    Sistem difokuskan untuk melakukan pemantauan intensif di titik rawan luapan air, terutama di sekitar area perumahan warga dekat bantaran sungai utama Kota Palu.
+                    Sistem difokuskan untuk melakukan pemantauan intensif di titik rawan luapan air, terutama di sekitar area perumahan warga melalui penerapan Sistem Mitigasi Banjir Cerdas.
                 </p>
                 
                 <div class="grid grid-cols-2 gap-4 pt-2">
@@ -223,13 +231,136 @@
         </div>
     </section>
 
+    <!-- NEWS SECTION START -->
+    <section class="relative z-10 max-w-7xl mx-auto px-4 w-full mb-20" id="berita">
+        <div class="mt-8 bg-white/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/60 relative z-10">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-indigo-100/80 text-indigo-600 rounded-xl backdrop-blur-sm shadow-sm">
+                        <i data-lucide="newspaper" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Mading Berita Publik</h3>
+                        <p class="text-sm text-slate-500 mt-1">Informasi mitigasi terbaru dari Sistem Mitigasi Banjir Cerdas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
+                
+                @forelse($beritas ?? [] as $berita)
+                <div class="min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px] snap-start bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden shadow-sm border border-white/50 flex flex-col group cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="relative h-48 md:h-56 overflow-hidden bg-slate-200/50 flex shrink-0">
+                        @if($berita->foto)
+                            <img src="{{ asset('storage/' . $berita->foto) }}" alt="Foto Berita" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                <i data-lucide="image" class="w-12 h-12 opacity-50"></i>
+                            </div>
+                        @endif
+                        
+                        <div class="absolute top-4 left-4 bg-slate-900/70 text-white text-[11px] md:text-xs font-bold px-3.5 py-1.5 rounded-full shadow-sm backdrop-blur-md">
+                            {{ $berita->created_at->format('d M Y') }}
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between relative z-10">
+                        <h4 class="font-bold text-slate-800 text-[16px] md:text-lg leading-snug line-clamp-3 mb-4 group-hover:text-blue-600 transition-colors">
+                            {{ $berita->judul }}
+                        </h4>
+                        
+                        <div id="konten-berita-{{ $berita->id }}" class="hidden">{{ $berita->konten }}</div>
+                        <button onclick="bukaModalBerita('{{ $berita->id }}', '{{ addslashes($berita->judul) }}', '{{ $berita->created_at->format('d M Y') }}', '{{ $berita->foto ? asset('storage/'.$berita->foto) : '' }}')" class="text-amber-500 font-bold text-sm flex items-center justify-end gap-1.5 hover:text-amber-600 transition-colors w-full text-right mt-2 focus:outline-none">
+                            Selengkapnya <i data-lucide="arrow-right-circle" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+                @empty
+                <div class="w-full bg-white/40 backdrop-blur-md border border-dashed border-slate-300 rounded-3xl p-10 text-center flex flex-col items-center justify-center">
+                    <i data-lucide="newspaper" class="w-12 h-12 text-slate-300 mb-4"></i>
+                    <p class="text-slate-500 font-medium text-base">Belum ada berita dirilis oleh Admin Sistem Mitigasi Banjir Cerdas.</p>
+                </div>
+                @endforelse
+
+            </div>
+        </div>
+    </section>
+    <!-- NEWS SECTION END -->
+
+    <!-- MODAL BERITA START -->
+    <div id="modalBerita" class="fixed inset-0 z-[100] hidden bg-slate-900/80 backdrop-blur-md flex-col items-center justify-center p-4 md:p-8 transition-opacity duration-300 opacity-0">
+        <div class="bg-white/90 backdrop-blur-xl rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] md:max-h-[85vh] transform scale-95 transition-transform duration-300 border border-white/20" id="modalBeritaContent">
+            
+            <div class="flex justify-between items-center p-5 border-b border-slate-200/50 bg-slate-50/50">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100/80 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> <span id="modalBeritaTanggal"></span>
+                    </span>
+                    <span class="text-slate-400 text-sm font-medium hidden md:inline-block">— Sistem Mitigasi Banjir Cerdas</span>
+                </div>
+                <button onclick="tutupModalBerita()" class="p-2 bg-slate-200/80 hover:bg-red-100 hover:text-red-600 text-slate-500 rounded-full transition-colors focus:outline-none backdrop-blur-sm">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto p-6 md:p-10 custom-scrollbar bg-transparent">
+                <img id="modalBeritaFoto" src="" class="w-full h-64 md:h-96 object-cover rounded-2xl mb-8 shadow-md hidden" alt="Foto Berita">
+                
+                <h2 id="modalBeritaJudul" class="text-3xl md:text-4xl font-black text-slate-800 mb-8 leading-tight"></h2>
+                
+                <div id="modalBeritaDeskripsi" class="text-slate-700 text-[16px] md:text-[17px] leading-loose whitespace-pre-wrap font-normal text-justify"></div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL BERITA END -->
+
+
     <footer class="relative z-10 border-t border-slate-200 bg-white/50 mt-auto py-8 text-center text-slate-500 text-sm">
-        <p>&copy; 2026 Flood-Vision System. Dikembangkan untuk mitigasi cerdas Kota Palu.</p>
+        <p>&copy; 2026 Flood-Vision System. Dikembangkan sebagai Sistem Mitigasi Banjir Cerdas.</p>
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
+
+        function bukaModalBerita(id, judul, tanggal, fotoUrl) {
+            document.getElementById('modalBeritaJudul').innerText = judul;
+            document.getElementById('modalBeritaTanggal').innerText = tanggal;
+            
+            const kontenText = document.getElementById('konten-berita-' + id).innerText;
+            document.getElementById('modalBeritaDeskripsi').innerText = kontenText;
+
+            const fotoEl = document.getElementById('modalBeritaFoto');
+            if(fotoUrl) {
+                fotoEl.src = fotoUrl;
+                fotoEl.classList.remove('hidden');
+            } else {
+                fotoEl.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+            lucide.createIcons();
+        }
+
+        function tutupModalBerita() {
+            const modal = document.getElementById('modalBerita');
+            const content = document.getElementById('modalBeritaContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
     </script>
 </body>
 </html>

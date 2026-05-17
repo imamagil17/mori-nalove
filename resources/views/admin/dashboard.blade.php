@@ -51,7 +51,7 @@
                                     <h3 class="text-sm font-semibold text-blue-100 tracking-wider uppercase flex items-center gap-2">
                                         <i data-lucide="cloud" class="w-4 h-4"></i> Cuaca Saat Ini
                                     </h3>
-                                    <span class="bg-white/20 px-2 py-1 rounded text-xs font-bold backdrop-blur-sm" id="weatherCity">Palu</span>
+                                    <span class="bg-white/20 px-2 py-1 rounded text-xs font-bold backdrop-blur-sm" id="weatherCity">Lokasi</span>
                                 </div>
                                 <div class="flex items-end gap-3 mt-4">
                                     <span class="text-6xl font-black tracking-tighter drop-shadow-sm" id="weatherTemp">--°</span>
@@ -221,7 +221,7 @@
                         <i data-lucide="bot" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm leading-tight">Gemini Assistant</h4>
+                        <h4 class="font-bold text-sm leading-tight">Flood Vision Assistant - Sistem Mitigasi Banjir Cerdas</h4>
                         <p class="text-[10px] text-blue-100 font-medium tracking-wider uppercase">AI Ready</p>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                         <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
                     </div>
                     <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-sm text-slate-700 border border-slate-100 leading-relaxed">
-                        Halo! Saya AI Assistant Flood Vision. Berdasarkan data saat ini, adakah yang bisa saya bantu terkait mitigasi?
+                        Halo! Saya Flood Vision Assistant - Sistem Mitigasi Banjir Cerdas. Berdasarkan data saat ini, adakah yang bisa saya bantu terkait mitigasi?
                     </div>
                 </div>
             </div>

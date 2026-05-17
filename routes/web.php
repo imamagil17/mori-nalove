@@ -13,7 +13,8 @@ use App\Http\Controllers\BeritaController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    $beritas = \App\Models\Berita::latest()->get();
+    return view('welcome', compact('beritas'));
 });
 
 // Admin routes
@@ -41,8 +42,15 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('/admin/berita/{id}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 });
 
-// Route Dashboard User
+// 👇 ROUTE DASHBOARD UTAMA (SMART ROUTE PEMBAGI ROLE) 👇
 Route::get('/dashboard', function () {
+    // 1. Cek apakah yang login adalah admin
+    if (auth()->user()->role === 'admin') {
+        // Jika ya, tendang otomatis ke rute admin.dashboard
+        return redirect()->route('admin.dashboard');
+    }
+    
+    // 2. Jika bukan admin (warga biasa), jalankan seperti biasa
     // Ambil semua data berita dari database urut dari yang paling baru
     $beritas = \App\Models\Berita::latest()->get();
     
