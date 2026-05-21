@@ -1,5 +1,5 @@
-<section class="relative z-10 max-w-7xl mx-auto px-4 w-full mb-20 reveal-on-scroll" id="berita">
-    <div class="mt-8 bg-white/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-sm border border-white/40 relative z-10">
+<section class="relative z-10 max-w-7xl mx-auto px-4 w-full mb-6 reveal-on-scroll" id="berita">
+        <div class="mt-8 bg-white/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-sm border border-white/40 relative z-10">
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-3">
                 <div class="p-2.5 bg-indigo-100/80 text-indigo-600 rounded-xl backdrop-blur-sm shadow-sm">

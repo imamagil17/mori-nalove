@@ -1,4 +1,4 @@
-<section class="relative z-10 max-w-7xl mx-auto px-4 w-full mb-24 scroll-mt-24 reveal-on-scroll" id="monitoring">
+<section class="relative z-10 max-w-7xl mx-auto px-4 w-full mb-10 scroll-mt-24 reveal-on-scroll" id="monitoring">
     <div class="text-center mb-12">
         <span class="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Live Demo</span>
         <h2 class="text-3xl md:text-4xl font-black text-slate-800 mt-3">Pantauan Real-Time</h2>

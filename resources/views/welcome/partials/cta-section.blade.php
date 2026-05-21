@@ -1,7 +1,9 @@
-<section class="relative z-10 max-w-5xl mx-auto px-4 w-full mb-20 reveal-on-scroll">
+<section class="relative z-10 max-w-5xl mx-auto px-4 w-full mb-12 md:mb-16 reveal-on-scroll">
     <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 md:p-12 text-center text-white shadow-xl shadow-blue-500/20 relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
         <div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
-            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14 gang-0.18-.357.223-.548.223l.188-2.85 5.18-4.686c.223-.204-.054-.31-.346-.116l-6.405 4.026-2.76-.86c-.6-.188-.614-.6.125-.89l10.793-4.16c.5-.184.945.116.808.887z"/></svg>
+            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zM12.43 8.19c-.39-.16-.84.02-1.03.4l-3.32 6.64c-.16.32-.08.72.2 1 .23.23.55.33.86.27l2.84-.57 2.14 1.61c.32.24.76.22 1.06-.05.3-.27.4-.7-.25-1.34l-1.63-1.63 2.14-5.36c.2-.5-.1-.1-.45-.25l-2.49-1.02z"/>
+            </svg>
         </div>
         <div class="relative z-10 max-w-2xl mx-auto space-y-6">
             <h2 class="text-3xl md:text-4xl font-black tracking-tight">Siap Melindungi Diri dan Keluarga?</h2>
