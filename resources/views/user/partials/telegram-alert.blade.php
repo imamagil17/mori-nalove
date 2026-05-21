@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-6 text-white shadow-lg shadow-blue-500/30 relative overflow-hidden group">
+<div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-4 md:p-6 text-white shadow-lg shadow-blue-500/30 relative overflow-hidden group">
     <div class="absolute -right-6 -bottom-6 opacity-20 group-hover:scale-110 transition-transform duration-500">
         <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.686c.223-.204-.054-.31-.346-.116l-6.405 4.026-2.76-.86c-.6-.188-.614-.6.125-.89l10.793-4.16c.5-.184.945.116.808.887z"/></svg>
     </div>

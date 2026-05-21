@@ -1,5 +1,43 @@
 window.globalContext = "Level: --, Status: --, Risk Score: --";
 
+async function fetchNotificationHistory() {
+    try {
+        const res = await fetch('/api/notifications');
+        const json = await res.json();
+        
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+        
+        if (json.success && json.data.length > 0) {
+            container.innerHTML = json.data.map(item => `
+                <div class="flex items-start gap-3 p-3 bg-slate-50/60 rounded-2xl border border-slate-100">
+                    <div class="p-2 bg-rose-100 text-rose-600 rounded-xl mt-0.5">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <h4 class="font-bold text-sm text-slate-800">${item.title || 'Peringatan Sistem'}</h4>
+                            <span class="text-xs text-slate-400">${new Date(item.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${item.message || item.keterangan || ''}</p>
+                    </div>
+                </div>
+            `).join('');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        } else {
+            container.innerHTML = `
+                <div class="flex justify-center items-center py-4 text-slate-400">
+                    <i data-lucide="info" class="w-6 h-6"></i>
+                    <span class="ml-2 text-sm font-medium">Belum ada riwayat peringatan.</span>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+    } catch(e) {
+        console.error('Error fetching notification history:', e);
+    }
+}
+
 async function fetchDashboardData() {
     const refreshIcon = document.getElementById('refreshIcon');
     if(refreshIcon) refreshIcon.classList.add('animate-spin');
@@ -78,6 +116,8 @@ async function fetchDashboardData() {
             }
         }
     } catch(e) { console.error('Error fetching logs:', e); }
+
+    await fetchNotificationHistory();
 
     if(refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 500);
 }

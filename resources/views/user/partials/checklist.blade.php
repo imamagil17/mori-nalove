@@ -1,5 +1,5 @@
-<div class="bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 relative overflow-hidden">
-    <div class="flex items-center justify-between mb-4">
+<div class="bg-white/40 backdrop-blur-md rounded-3xl p-4 md:p-6 shadow-sm border border-white/40 relative overflow-hidden">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2 sm:gap-0">
         <div class="flex items-center gap-3">
             <div class="p-2 bg-rose-100 text-rose-600 rounded-xl">
                 <i data-lucide="briefcase" class="w-5 h-5"></i>
@@ -7,7 +7,7 @@
             <h3 class="text-base font-bold text-slate-800">Kebutuhan Evakuasi</h3>
         </div>
     </div>
-    <p class="text-xs text-slate-500 mb-4">Pastikan Anda telah menyiapkan barang-barang esensial berikut sebelum evakuasi:</p>
+    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Pastikan Anda telah menyiapkan barang-barang esensial berikut sebelum evakuasi:</p>
     
     <div class="space-y-3">
         <div class="flex items-center gap-3 p-3 bg-white/60 rounded-xl border border-slate-100 shadow-sm transition-colors hover:bg-white">

@@ -1,4 +1,4 @@
-<div class="bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 flex flex-col h-96 relative group mt-8">
+<div class="bg-white/40 backdrop-blur-md rounded-3xl p-4 md:p-6 shadow-sm border border-white/40 flex flex-col h-[350px] md:h-96 relative group mt-8">
     <div class="flex justify-between items-center mb-6">
         <div class="flex items-center gap-3">
             <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl">

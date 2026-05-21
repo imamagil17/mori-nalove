@@ -1,5 +1,5 @@
 <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-    <div id="chatWindow" class="hidden w-80 lg:w-96 h-[28rem] mb-4 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/60 flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right">
+    <div id="chatWindow" class="hidden w-[calc(100vw-3rem)] sm:w-80 lg:w-96 h-[28rem] mb-4 bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/60 flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right">
         <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 text-white flex justify-between items-center shadow-md">
             <div class="flex items-center gap-3">
                 <div class="bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">

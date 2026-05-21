@@ -1,5 +1,5 @@
-<div class="bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 relative overflow-hidden">
-    <div class="flex items-center justify-between mb-4">
+<div class="bg-white/40 backdrop-blur-md rounded-3xl p-4 md:p-6 shadow-sm border border-white/40 relative overflow-hidden">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2 sm:gap-0">
         <div class="flex items-center gap-3">
             <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
                 <i data-lucide="megaphone" class="w-5 h-5"></i>
@@ -7,7 +7,7 @@
             <h3 class="text-base font-bold text-slate-800">Lapor Kondisi Area</h3>
         </div>
     </div>
-    <p class="text-xs text-slate-500 mb-4">Laporkan jika terjadi genangan air abnormal di wilayah Anda.</p>
+    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Laporkan jika terjadi genangan air abnormal di wilayah Anda.</p>
     
     <form id="citizenReportForm" class="space-y-4">
         <div>
