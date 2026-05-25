@@ -5,10 +5,10 @@
 
 // 1. Array labels waktu statis (Timeframe teratur per jam - 24 Jam Penuh)
 const TIMEFRAME_LABELS = [
-    '00:00 WITA', '01:00 WITA', '02:00 WITA', '03:00 WITA', '04:00 WITA', '05:00 WITA',
-    '06:00 WITA', '07:00 WITA', '08:00 WITA', '09:00 WITA', '10:00 WITA', '11:00 WITA',
-    '12:00 WITA', '13:00 WITA', '14:00 WITA', '15:00 WITA', '16:00 WITA', '17:00 WITA',
-    '18:00 WITA', '19:00 WITA', '20:00 WITA', '21:00 WITA', '22:00 WITA', '23:00 WITA'
+    '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
 ];
 
 // Menyimpan data simulasi cache untuk setiap sungai agar saat berganti-ganti datanya tidak ter-reset acak total
@@ -132,17 +132,7 @@ function updateChart(data) {
                                 yMax: 60,
                                 borderColor: '#22c55e', // Hijau Aman
                                 borderWidth: 2,
-                                borderDash: [6, 6],
-                                label: {
-                                    display: true,
-                                    content: 'Batas Normal (60%)',
-                                    position: 'start',
-                                    backgroundColor: '#22c55e',
-                                    color: '#ffffff',
-                                    font: { family: "'Figtree', sans-serif", size: 9, weight: 'bold' },
-                                    padding: 4,
-                                    borderRadius: 6
-                                }
+                                borderDash: [6, 6]
                             },
                             lineSiaga: {
                                 type: 'line',
@@ -150,17 +140,7 @@ function updateChart(data) {
                                 yMax: 80,
                                 borderColor: '#f97316', // Jingga Siaga
                                 borderWidth: 2,
-                                borderDash: [6, 6],
-                                label: {
-                                    display: true,
-                                    content: 'Batas Siaga (80%)',
-                                    position: 'start',
-                                    backgroundColor: '#f97316',
-                                    color: '#ffffff',
-                                    font: { family: "'Figtree', sans-serif", size: 9, weight: 'bold' },
-                                    padding: 4,
-                                    borderRadius: 6
-                                }
+                                borderDash: [6, 6]
                             },
                             lineBahaya: {
                                 type: 'line',
@@ -168,17 +148,7 @@ function updateChart(data) {
                                 yMax: 90,
                                 borderColor: '#ef4444', // Merah Bahaya
                                 borderWidth: 2,
-                                borderDash: [6, 6],
-                                label: {
-                                    display: true,
-                                    content: 'Batas Bahaya (90%)',
-                                    position: 'start',
-                                    backgroundColor: '#ef4444',
-                                    color: '#ffffff',
-                                    font: { family: "'Figtree', sans-serif", size: 9, weight: 'bold' },
-                                    padding: 4,
-                                    borderRadius: 6
-                                }
+                                borderDash: [6, 6]
                             }
                         }
                     }
