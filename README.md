@@ -24,36 +24,6 @@ Jantung kecerdasan buatan dari Flood-Vision bertumpu pada arsitektur jaringan sa
 
 ---
 
-## 2. System Features Ecosystem
-
-Flood-Vision menyajikan tiga gerbang antarmuka interaktif yang dibalut dengan desain **Premium SaaS Light Mode** super modern yang menampilkan tata letak *Bento Box Grid*, komponen *glassmorphism* (`backdrop-blur-md`), gradien halus (`bg-slate-50`), serta responsivitas penuh di berbagai ukuran layar.
-
-```mermaid
-graph TD
-    A[Public Welcome Page] -->|Login Warga| B[Citizen Portal]
-    A -->|Login Admin| C[Command Center]
-    
-    subgraph Citizen Portal [Citizen Portal / User Dashboard]
-        B1[Real-Time Flood Tier Indicators]
-        B2[Chart.js Historical Graphs]
-        B3[CSRF-Protected Citizen Report Form]
-        B4[NLP AI Chatbot Assistant]
-        B5[Evacuation Guide Modal]
-    end
-    
-    subgraph Command Center [Command Center / Admin Dashboard]
-        C1[YOLOv26 Video Processing Queue]
-        C2[WITA Synchronized Telegram Simulation]
-        C3[Secure Report Verification Panel]
-        C4[News & Announcement CRUD]
-    end
-    
-    subgraph AI & Broadcast Pipeline
-        D[FastAPI Inference Engine - YOLOv26] <--> C1
-        E[Telegram Bot API] <--> C2
-    end
-```
-
 ### A. Citizen Portal (User Dashboard)
 Gerbang interaksi bagi masyarakat sipil di kawasan rawan bencana untuk memantau keselamatan lingkungan mereka secara mandiri:
 *   **Real-time Flood Tier Indicators:** Representasi visual tingkat kerawanan air secara instan berdasarkan klasifikasi terstandarisasi BPBD: **Aman** (Hijau), **Waspada** (Kuning), **Siaga** (Oranye), dan **Bahaya** (Merah).
