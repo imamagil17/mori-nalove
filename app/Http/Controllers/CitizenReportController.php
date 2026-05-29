@@ -15,25 +15,28 @@ class CitizenReportController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi disamakan dengan ENUM Database (Rendah, Sedang, Tinggi)
         $request->validate([
             'lokasi' => 'required|string|max:255',
-            'tingkat_genangan' => 'required|in:Aman,Waspada,Siaga,Bahaya',
+            'tingkat_genangan' => 'required|in:Rendah,Sedang,Tinggi',
             'deskripsi' => 'nullable|string'
         ]);
 
-        $report = CitizenReport::create([
-            'user_id' => auth()->check() ? auth()->id() : null,
-            'lokasi' => $request->lokasi,
-            'tingkat_genangan' => $request->tingkat_genangan,
-            'deskripsi' => $request->deskripsi,
-            'status' => 'Pending'
-        ]);
+        try {
+            // 2. Simpan ke Database
+            CitizenReport::create([
+                'user_id' => auth()->check() ? auth()->id() : null,
+                'lokasi' => $request->lokasi,
+                'tingkat_genangan' => $request->tingkat_genangan,
+                'deskripsi' => $request->deskripsi,
+                'status' => 'Pending'
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Laporan berhasil dikirim.',
-            'data' => $report
-        ], 201);
+            return redirect()->back()->with('success', 'Terima kasih! Laporan kondisi area berhasil dikirim.');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengirim laporan: ' . $e->getMessage());
+        }
     }
 
     public function verify($id)
@@ -42,9 +45,6 @@ class CitizenReportController extends Controller
         $report->status = 'Terverifikasi';
         $report->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Laporan berhasil diverifikasi.'
-        ]);
+        return redirect()->back()->with('success', 'Status laporan berhasil diverifikasi.');
     }
 }

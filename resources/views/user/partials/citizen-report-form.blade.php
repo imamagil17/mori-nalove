@@ -1,4 +1,18 @@
 <div class="bg-white/70 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-4 md:p-6 relative overflow-hidden">
+    
+    @if(session('success'))
+        <div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl flex items-center gap-2 text-sm font-medium animate-[slideDown_0.2s_ease-out]">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-2 text-sm font-medium animate-[slideDown_0.2s_ease-out]">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500"></i>
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2 sm:gap-0">
         <div class="flex items-center gap-3">
             <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
@@ -9,10 +23,12 @@
     </div>
     <p class="text-xs text-slate-500 mb-4 line-clamp-2">Laporkan jika terjadi genangan air abnormal di wilayah Anda.</p>
     
-    <form id="citizenReportForm" class="space-y-4">
+    <form action="{{ route('reports.store') }}" method="POST" class="space-y-4">
+        @csrf 
+
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Detail (Sungai)</label>
-            <select id="reportLokasi" name="nama_sungai" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
+            <select name="lokasi" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
                 <option value="" disabled selected>Pilih Aliran Sungai...</option>
                 <option value="Sungai Gumbasa">Wilayah Sekitar Aliran Sungai Gumbasa</option>
                 <option value="Sungai Lariang">Wilayah Sekitar Aliran Sungai Lariang</option>
@@ -27,21 +43,23 @@
                 <option value="Sungai Bangga">Wilayah Sekitar Aliran Sungai Bangga</option>
             </select>
         </div>
+        
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Tingkat Genangan</label>
-            <select id="reportGenangan" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none appearance-none">
+            <select name="tingkat_genangan" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none appearance-none">
                 <option value="" disabled selected>Pilih Dampak Luapan...</option>
-                <option value="Aman">Aman / Normal (Belum Meluap / Genangan Hujan)</option>
-                <option value="Waspada">Waspada (Air Mulai Masuk Jalanan / Semata Kaki)</option>
-                <option value="Siaga">Siaga (Air Masuk ke Rumah Warga / Selutut)</option>
-                <option value="Bahaya">Bahaya (Banjir Bandang Kritis / Sepinggang atau Lebih)</option>
+                <option value="Rendah">Rendah (Aman / Genangan Hujan Biasa)</option>
+                <option value="Sedang">Sedang (Waspada / Air Masuk Jalan hingga Selutut)</option>
+                <option value="Tinggi">Tinggi (Bahaya / Banjir Kritis Sepinggang atau Lebih)</option>
             </select>
         </div>
+        
         <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Tambahan (Opsional)</label>
-            <textarea id="reportDeskripsi" rows="2" placeholder="Cth: Air sudah masuk ke pemukiman di Desa Oluboju, butuh bantuan evakuasi lansia..." class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none resize-none"></textarea>
+            <textarea name="deskripsi" rows="2" placeholder="Cth: Air sudah masuk ke pemukiman di Desa Oluboju, butuh bantuan evakuasi lansia..." class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none resize-none"></textarea>
         </div>
-        <button type="submit" id="btnSubmitReport" class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+        
+        <button type="submit" onclick="this.innerHTML='<i data-lucide=\'loader-2\' class=\'w-4 h-4 animate-spin\'></i> Mengirim...'; this.classList.add('opacity-75', 'cursor-wait'); lucide.createIcons();" class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
             <i data-lucide="send" class="w-4 h-4"></i> Kirim Laporan Warga
         </button>
     </form>

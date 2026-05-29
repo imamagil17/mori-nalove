@@ -13,7 +13,7 @@
             <label for="email" class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Email Address') }}</label>
             <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" 
                    class="w-full rounded-xl bg-white/50 border border-slate-300 text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all px-4 py-3 outline-none shadow-sm" 
-                   placeholder="admin@floodvision.com">
+                   placeholder="Masukkan email Anda">
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-rose-500 text-sm" />
         </div>
 
