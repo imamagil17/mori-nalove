@@ -10,7 +10,7 @@
 
 ---
 
-## 🛰️ 1. Header & High-Tech Introduction
+##  1. Header & High-Tech Introduction
 
 **Flood-Vision** adalah platform mitigasi bencana banjir cerdas hibrida berkinerja tinggi yang dirancang khusus untuk memantau, mendeteksi, dan mengumumkan status level air sungai secara *real-time*. Platform ini beroperasi dengan presisi tingkat tinggi untuk meminimalkan risiko bencana banjir di zona rawan dan siaga tinggi, seperti **Sungai Gumbasa**, **Sungai Lariang**, dan **Sungai Ngatabaru**.
 
@@ -19,7 +19,7 @@ Sistem ini mengadopsi arsitektur *decoupled hybrid architecture* yang memisahkan
 2. **AI Inference & Deep Learning Microservice (Python FastAPI):** Node independen berlatensi rendah khusus untuk inferensi model visi komputer mendeteksi ketinggian permukaan air sungai dari kamera pengawas.
 3. **Automated Emergency Broadcasting Pipeline (Telegram Bot API):** Mengirimkan peringatan bencana instan secara langsung ke perangkat warga dan tim penolong di lapangan.
 
-### 🧠 Deep Learning Core: YOLOv26 Nano Integration
+###  Deep Learning Core: YOLOv26 Nano Integration
 Jantung kecerdasan buatan dari Flood-Vision bertumpu pada arsitektur jaringan saraf konvolusional **YOLOv26 Nano** yang telah dispesialisasikan melalui *custom-training* menggunakan bobot model teroptimasi (`.pt`). Model ini dilatih secara khusus untuk mengekstrak fitur garis batas air, mendeteksi laju fluktuasi ketinggian air sungai secara piksel-demi-piksel, serta menghitung status luapan secara langsung dari umpan *video stream* resolusi tinggi dengan kebutuhan komputasi minimal (*ultra-low edge footprint*).
 
 ---
