@@ -4,23 +4,21 @@
             
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch mb-8">
                 
-                <div class="xl:col-span-1 flex flex-col h-full space-y-8">
+                <!-- Kolom Kiri: Panduan & Telegram Alert -->
+                <div class="xl:col-span-1 flex flex-col space-y-8">
                     @include('user.partials.safety-guide')
                     @include('user.partials.telegram-alert')
                 </div>
 
-                <div class="xl:col-span-2 flex flex-col justify-between h-full space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 shrink-0">
-                        @include('user.partials.weather-card')
-                        @include('user.partials.ai-prediction-card')
-                    </div>
-
-                    <div class="w-full flex-grow flex flex-col h-0 min-h-[400px]">
+                <!-- Kolom Kanan: Grafik Tren Air (Dibuat membesar penuh tanpa space kosong) -->
+                <div class="xl:col-span-2 flex flex-col">
+                    <div class="w-full h-full flex flex-col flex-grow">
                         @include('user.partials.water-chart')
                     </div>
                 </div>
             </div>
 
+            <!-- Bagian Bawah Dashboard -->
             <div class="space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @include('user.partials.citizen-report-form')

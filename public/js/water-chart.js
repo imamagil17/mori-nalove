@@ -1,6 +1,7 @@
 /**
  * water-chart.js - Flood Vision v1.0
  * Javascript Controller for River Water Level Line Chart (Chart.js + Annotation Plugin)
+ * * SINKRONISASI MUTAKHIR: Perbaikan bug lintas sungai & Gradasi Area Dinamis (Anti-Terputus).
  */
 
 // 1. Array labels waktu statis (Timeframe teratur per jam - 24 Jam Penuh)
@@ -11,13 +12,12 @@ const TIMEFRAME_LABELS = [
     '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
 ];
 
-// Menyimpan data simulasi cache untuk setiap sungai agar saat berganti-ganti datanya tidak ter-reset acak total
+// Menyimpan data simulasi cache untuk setiap sungai agar tidak ter-reset acak
 const riverDataCache = {};
 
 // Fungsi pembantu menghasilkan data level air (%) realistis per sungai
 function generateRiverData(riverName) {
     if (riverDataCache[riverName]) {
-        // Jika sudah ada data di cache, kita geser sedikit nilainya secara smooth (mengalir naik-turun)
         const oldData = riverDataCache[riverName];
         return oldData.map(val => {
             const drift = Math.floor(Math.random() * 7) - 3; // -3 s.d. +3
@@ -52,18 +52,20 @@ function generateRiverData(riverName) {
 
 // 2. Fungsi Utama Dipanggil dari API Auto-refresh
 function updateChart(data) {
-    // Ambil sungai yang saat ini terpilih di dropdown, default Sungai Gumbasa jika element belum siap
-    const dropdown = document.querySelector('select[onchange="updateChartByRiver(this.value)"]');
+    // Cari elemen dropdown berdasarkan ID utama riverSelect yang ada di Blade
+    const dropdown = document.getElementById('riverSelect') || document.querySelector('select');
     const selectedRiver = dropdown ? dropdown.value : "Sungai Gumbasa";
     
-    // Gunakan dataset dinamis sungai terpilih
+    // Ambil/generate data tren dasar untuk sungai terpilih
     const values = generateRiverData(selectedRiver);
 
-    // Jika ada data riil dari sensor OpenCV/YOLO di database, kita suntikkan ke data point terakhir
+    // VALIDASI INTEGRASI: Data sensor riil dari database hanya disuntikkan jika NAMA SUNGAI COCOK
     if (data && data.length > 0) {
         const latestLog = data[data.length - 1];
-        if (latestLog && latestLog.nilai_level) {
-            // Skala level air real-time YOLO disesuaikan ke data point terakhir (18:00 WITA)
+        
+        // Cek kecocokan nama_sungai hasil log database dengan dropdown sungai aktif di UI
+        if (latestLog && latestLog.nilai_level && latestLog.nama_sungai === selectedRiver) {
+            // Mengganti titik data terakhir dengan nilai riil dari YOLO
             values[values.length - 1] = Math.min(100, Math.max(0, Math.round(latestLog.nilai_level)));
         }
     }
@@ -80,9 +82,11 @@ function updateChart(data) {
         if (!ctxEl) return;
         const ctx = ctxEl.getContext('2d');
         
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.25)'); // blue-500
-        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+        // 🌟 REFAKTOR GRADASI DINAMIS: Mengikuti clientHeight kanvas agar tidak terputus di bawah
+        const gradient = ctx.createLinearGradient(0, 0, 0, ctxEl.clientHeight);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.25)');   // Biru transparan atas (25%)
+        gradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.08)'); // Menipis di tengah (8%)
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');     // Hilang total di dasar (0%)
 
         window.waterChart = new Chart(ctx, {
             type: 'line',
@@ -92,20 +96,20 @@ function updateChart(data) {
                     label: `Level Air ${selectedRiver} (%)`,
                     data: values,
                     borderColor: '#3b82f6', // blue-500
-                    backgroundColor: gradient,
+                    backgroundColor: gradient, // 💡 Menerapkan efek gradasi transparan
                     borderWidth: 3,
                     pointBackgroundColor: '#ffffff',
                     pointBorderColor: '#3b82f6',
                     pointBorderWidth: 2,
                     pointRadius: 5,
                     pointHoverRadius: 7,
-                    fill: true,
+                    fill: true, // 💡 Mengaktifkan isian area di bawah garis
                     tension: 0.35 
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: false, // 💡 Kunci penting agar tinggi grafik fleksibel mengikuti layout Grid CSS
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -123,14 +127,14 @@ function updateChart(data) {
                             }
                         }
                     },
-                    // 3 Garis Ambang Batas (Threshold Lines) Statis
+                    // 3 Garis Ambang Batas (Threshold Lines) Standar Kebencanaan 3 Tingkat
                     annotation: {
                         annotations: {
                             lineNormal: {
                                 type: 'line',
                                 yMin: 60,
                                 yMax: 60,
-                                borderColor: '#22c55e', // Hijau Aman
+                                borderColor: '#22c55e', // Hijau Normal
                                 borderWidth: 2,
                                 borderDash: [6, 6]
                             },
@@ -138,7 +142,7 @@ function updateChart(data) {
                                 type: 'line',
                                 yMin: 80,
                                 yMax: 80,
-                                borderColor: '#f97316', // Jingga Siaga
+                                borderColor: '#f97316', // Kuning/Jingga Siaga
                                 borderWidth: 2,
                                 borderDash: [6, 6]
                             },
@@ -181,12 +185,9 @@ function updateChart(data) {
     }
 }
 
-// 3. LOGIKA DYNAMIC UPDATE PER SUNGAI
+// 3. LOGIKA DYNAMIC UPDATE PER SUNGAI DROPDOWN
 function updateChartByRiver(riverName) {
-    // Jalankan pergeseran nilai secara halus menggunakan cache
     const values = generateRiverData(riverName);
-    
-    // Perbarui data cache agar nilainya stabil/sedikit berubah pada pergeseran berikutnya
     riverDataCache[riverName] = values;
 
     const existingChart = Chart.getChart('waterChart');
@@ -202,7 +203,6 @@ function updateChartByRiver(riverName) {
             easing: 'easeInOutQuad'
         });
     } else {
-        // Fallback jika chart belum siap diinisialisasi
         updateChart([]);
     }
 
@@ -213,7 +213,7 @@ function updateChartByRiver(riverName) {
 // Fungsi Sinkronisasi Halaman: Update komponen AI Prediction Card secara dinamis
 function updateAiPredictionCard(riverName) {
     const predictionData = {
-        'Sungai Gumbasa':  { level: 62, status: 'NORMAL',  score: 12, from: 'emerald-500', to: 'teal-600' },
+        'Sungai Gumbasa':   { level: 62, status: 'NORMAL',  score: 12, from: 'emerald-500', to: 'teal-600' },
         'Sungai Lariang':   { level: 91, status: 'BAHAYA',  score: 94, from: 'red-500',     to: 'rose-700' },
         'Sungai Lindu':     { level: 82, status: 'SIAGA',   score: 68, from: 'orange-500',  to: 'amber-600' },
         'Sungai Samba':     { level: 74, status: 'SIAGA',   score: 55, from: 'orange-500',  to: 'amber-600' },
@@ -228,7 +228,6 @@ function updateAiPredictionCard(riverName) {
 
     const d = predictionData[riverName] || { level: 50, status: 'NORMAL', score: 25, from: 'emerald-500', to: 'teal-600' };
 
-    // Failsafe DOM Updates: Dukung kedua versi ID (traditional & requested)
     const aiLev = document.getElementById('aiPredictedLevel') || document.getElementById('ai_level_air');
     if (aiLev) aiLev.textContent = d.level;
 
@@ -238,7 +237,6 @@ function updateAiPredictionCard(riverName) {
     const aiRisk = document.getElementById('aiRiskScore') || document.getElementById('ai_risk_score');
     if (aiRisk) aiRisk.textContent = d.score;
 
-    // Serasikan warna gradien background card berdasarkan tingkat risiko / status
     const card = document.getElementById('aiInsightsCard');
     if (card) {
         card.className = `bg-gradient-to-br from-${d.from} to-${d.to} rounded-3xl p-6 shadow-md text-white flex flex-col justify-between relative overflow-hidden transition-all duration-500`;

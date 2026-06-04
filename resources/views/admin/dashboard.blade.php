@@ -23,12 +23,7 @@
                     @include('admin.partials.recent-reports')
                 </div>
 
-                <div class="xl:col-span-2 flex flex-col h-full space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 shrink-0">
-                        @include('admin.partials.weather-card')
-                        @include('admin.partials.ai-prediction-card')
-                    </div>
-                    
+                <div class="xl:col-span-2 flex flex-col h-full space-y-8">                 
                     <div class="flex-grow flex flex-col h-0 w-full">
                         @include('admin.partials.water-chart')
                     </div>
