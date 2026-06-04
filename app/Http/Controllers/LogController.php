@@ -59,10 +59,8 @@ class LogController extends Controller
         // Klasifikasikan status keamanan centimeter dinamis
         if ($nilaiCm >= $rules['bahaya']) {
             $status = 'BAHAYA';
-        } elseif ($nilaiCm >= $rules['siaga']) {
-            $status = 'SIAGA';
         } elseif ($nilaiCm >= $rules['waspada']) {
-            $status = 'WASPADA';
+            $status = 'SIAGA';
         } else {
             $status = 'NORMAL';
         }
@@ -70,7 +68,7 @@ class LogController extends Controller
         // ====================================================
         // --- MULAI KODE OTOMATISASI TELEGRAM ---
         // ====================================================
-        $shouldSend = in_array($status, ['WASPADA', 'SIAGA', 'BAHAYA']);
+        $shouldSend = in_array($status, ['SIAGA', 'BAHAYA']);
 
         if ($shouldSend) {
             $token = env('TELEGRAM_BOT_TOKEN');

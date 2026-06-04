@@ -42,30 +42,35 @@ class VideoUploadController extends Controller
                 $namaSungai = $request->nama_sungai;
                 
                 // =======================================================
-                // 🌟 JEMBATAN API: LARAVEL -> PYTHON (YOLOv26)
+                // 🌟 JEMBATAN API: LARAVEL -> PYTHON (YOLOv26 Port 8001)
                 // =======================================================
                 $deteksiLevel = 0; 
                 $aiClassDetected = 'Tidak Ada';
 
                 try {
-                    // Menembak file video secara fisik ke server FastAPI di port 8001
+                    // Otomatis mengambil alamat port 8001 dari file .env
+                    $fastApiUrl = env('FASTAPI_AI_URL', 'http://127.0.0.1:8001');
+
+                    // Menembak file video secara fisik ke server FastAPI
                     $response = Http::timeout(60)->attach(
                         'file', file_get_contents($absolutePath), $fileName
-                    )->post('http://127.0.0.1:8001/api/deteksi');
+                    )->post($fastApiUrl . '/api/deteksi');
 
                     if ($response->successful()) {
                         $aiData = $response->json();
                         
                         if ($aiData['status'] == 'sukses' && $aiData['total_objek'] > 0) {
                             $hasilAI = $aiData['hasil'][0];
-                            $aiClassDetected = $hasilAI['kelas']; 
+                            
+                            // Paksa ke huruf kecil untuk mengantisipasi case-sensitivity output YOLO
+                            $aiClassDetected = strtolower($hasilAI['kelas']); 
                             
                             // KONVERSI SEMENTARA: Kelas YOLO ke Centimeter
-                            if (in_array($aiClassDetected, ['aman', 'person'])) {
+                            if (in_array($aiClassDetected, ['aman', 'person', 'normal'])) {
                                 $deteksiLevel = rand(30, 190); 
-                            } elseif ($aiClassDetected == 'siaga') {
+                            } elseif (in_array($aiClassDetected, ['siaga', 'waspada'])) {
                                 $deteksiLevel = rand(300, 380);
-                            } elseif ($aiClassDetected == 'bahaya') {
+                            } elseif (in_array($aiClassDetected, ['bahaya', 'awas'])) {
                                 $deteksiLevel = rand(450, 500);
                             } else {
                                 $deteksiLevel = rand(100, 200); 
@@ -84,8 +89,6 @@ class VideoUploadController extends Controller
                 // =======================================================
                 $statusKondisi = 'Normal';
                 
-                // Daftar lengkap aturan batas air (cm) untuk 11 sungai
-                // Silakan sesuaikan angka-angkanya nanti sesuai kebutuhan
                 $aturanSungai = [
                     'Sungai Gumbasa'   => ['bahaya' => 450, 'siaga' => 350, 'waspada' => 250],
                     'Sungai Lariang'   => ['bahaya' => 600, 'siaga' => 450, 'waspada' => 350],
@@ -100,19 +103,14 @@ class VideoUploadController extends Controller
                     'Sungai Bangga'    => ['bahaya' => 470, 'siaga' => 370, 'waspada' => 270],
                 ];
 
-                // Default threshold jika nama sungai error/tidak terdaftar
                 $defaultBatas = ['bahaya' => 400, 'siaga' => 300, 'waspada' => 200];
-
-                // Ambil aturan sesuai nama sungai, jika tidak ketemu pakai $defaultBatas
                 $batas = $aturanSungai[$namaSungai] ?? $defaultBatas;
 
                 // Cek status secara otomatis
                 if ($deteksiLevel >= $batas['bahaya']) {
                     $statusKondisi = 'Bahaya';
-                } elseif ($deteksiLevel >= $batas['siaga']) {
-                    $statusKondisi = 'Siaga';
                 } elseif ($deteksiLevel >= $batas['waspada']) {
-                    $statusKondisi = 'Waspada';
+                    $statusKondisi = 'Siaga';
                 } else {
                     $statusKondisi = 'Normal';
                 }
@@ -126,7 +124,7 @@ class VideoUploadController extends Controller
                     'waktu_rekaman' => $request->waktu_rekaman,
                     'nilai_level' => $deteksiLevel, 
                     'status_kondisi' => $statusKondisi,
-                    'keterangan' => "YOLO: " . $aiClassDetected . " | " . $request->keterangan 
+                    'keterangan' => "YOLO class: [" . $aiClassDetected . "] | " . $request->keterangan 
                 ]);
 
                 return redirect()->back()->with('success', 'Video berhasil diunggah dan dianalisis langsung oleh YOLOv26!');

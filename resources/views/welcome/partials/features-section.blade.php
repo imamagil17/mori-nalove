@@ -26,7 +26,7 @@
                 <i data-lucide="send" class="w-7 h-7"></i>
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-3">Otomatisasi Telegram</h3>
-            <p class="text-slate-600 text-sm leading-relaxed">Menembakkan bot API Telegram secara instan ke grup warga ketika status kamera mendeteksi level bahaya **SIAGA** maupun **AWAS**.</p>
+            <p class="text-slate-600 text-sm leading-relaxed">Menembakkan bot API Telegram secara instan ke grup warga ketika status kamera mendeteksi level bahaya **SIAGA** maupun **BAHAYA**.</p>
         </div>
     </div>
 </section>

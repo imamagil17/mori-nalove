@@ -217,13 +217,13 @@ function updateAiPredictionCard(riverName) {
         'Sungai Lariang':   { level: 91, status: 'BAHAYA',  score: 94, from: 'red-500',     to: 'rose-700' },
         'Sungai Lindu':     { level: 82, status: 'SIAGA',   score: 68, from: 'orange-500',  to: 'amber-600' },
         'Sungai Samba':     { level: 74, status: 'SIAGA',   score: 55, from: 'orange-500',  to: 'amber-600' },
-        'Sungai Pakuli':    { level: 58, status: 'WASPADA', score: 42, from: 'orange-500',  to: 'amber-600' },
+        'Sungai Pakuli':    { level: 58, status: 'SIAGA',   score: 42, from: 'orange-500',  to: 'amber-600' },
         'Sungai Marawola':  { level: 38, status: 'NORMAL',  score: 10, from: 'emerald-500', to: 'teal-600' },
         'Sungai Palolo':    { level: 48, status: 'NORMAL',  score: 20, from: 'emerald-500', to: 'teal-600' },
-        'Sungai Kulawi':    { level: 30, status: 'AMAN',    score: 18, from: 'emerald-500', to: 'teal-600' },
-        'Sungai Ngatabaru': { level: 25, status: 'AMAN',    score: 8,  from: 'emerald-500', to: 'teal-600' },
-        'Sungai Wuno':      { level: 32, status: 'AMAN',    score: 14, from: 'emerald-500', to: 'teal-600' },
-        'Sungai Bangga':    { level: 68, status: 'WASPADA', score: 38, from: 'orange-500',  to: 'amber-600' }
+        'Sungai Kulawi':    { level: 30, status: 'NORMAL',  score: 18, from: 'emerald-500', to: 'teal-600' },
+        'Sungai Ngatabaru': { level: 25, status: 'NORMAL',  score: 8,  from: 'emerald-500', to: 'teal-600' },
+        'Sungai Wuno':      { level: 32, status: 'NORMAL',  score: 14, from: 'emerald-500', to: 'teal-600' },
+        'Sungai Bangga':    { level: 68, status: 'SIAGA',   score: 38, from: 'orange-500',  to: 'amber-600' }
     };
 
     const d = predictionData[riverName] || { level: 50, status: 'NORMAL', score: 25, from: 'emerald-500', to: 'teal-600' };

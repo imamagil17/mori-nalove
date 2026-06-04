@@ -51,7 +51,7 @@
     // ── Database Sync ──────────────────────────────────────────────────────────
     let isUploading    = false;   // guard: block new request while one is in-flight
     let lastUploadTime = 0;       // ms timestamp of last SUCCESSFUL send
-    let prevStatus     = 'AMAN';
+    let prevStatus     = 'NORMAL';
     let showSavedBadge  = false;  // shows "✓ Data Tersimpan" badge on HUD
     let savedBadgeTimer = null;
 
@@ -242,10 +242,10 @@
         const W = canvas.width;
         const H = canvas.height;
 
-        let status = 'AMAN';
+        let status = 'NORMAL';
         let color  = '#10b981';
-        if      (dv > 70) { status = 'AWAS';  color = '#ef4444'; }
-        else if (dv > 35) { status = 'SIAGA'; color = '#f59e0b'; }
+        if      (dv >= 80) { status = 'BAHAYA'; color = '#ef4444'; }
+        else if (dv >= 50) { status = 'SIAGA';  color = '#f59e0b'; }
 
         // ① Dim overlay
         ctx.fillStyle = 'rgba(0,0,0,0.18)';

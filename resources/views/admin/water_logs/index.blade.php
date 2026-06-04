@@ -69,17 +69,16 @@
                                             $status = 'Bahaya';
                                         } elseif ($level >= 50) {
                                             $status = 'Siaga';
-                                        } elseif ($level >= 35) {
-                                            $status = 'Waspada';
+                                        } else {
+                                            $status = 'Normal';
                                         }
                                     }
                                     
-                                    if ($status === 'Bahaya') {
+                                    $statusUpper = strtoupper($status);
+                                    if ($statusUpper === 'BAHAYA' || $statusUpper === 'AWAS') {
                                         $colorClass = 'text-red-600';
-                                    } elseif ($status === 'Siaga') {
+                                    } elseif ($statusUpper === 'SIAGA' || $statusUpper === 'WASPADA') {
                                         $colorClass = 'text-orange-500';
-                                    } elseif ($status === 'Waspada') {
-                                        $colorClass = 'text-amber-500';
                                     } else {
                                         $colorClass = 'text-emerald-600';
                                     }
@@ -89,14 +88,10 @@
                                     $icon = 'sun';
                                     $iconColor = 'text-amber-500';
                                     
-                                    if ($status === 'Bahaya' || $status === 'Siaga') {
+                                    if (in_array($statusUpper, ['BAHAYA', 'AWAS', 'SIAGA', 'WASPADA'])) {
                                         $cuaca = 'Hujan Deras';
                                         $icon = 'cloud-lightning';
                                         $iconColor = 'text-indigo-500';
-                                    } elseif ($status === 'Waspada') {
-                                        $cuaca = 'Gerimis';
-                                        $icon = 'cloud-rain';
-                                        $iconColor = 'text-blue-500';
                                     } else {
                                         $cuaca = 'Berawan';
                                         $icon = 'cloud-sun';

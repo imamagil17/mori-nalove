@@ -37,7 +37,6 @@
                         <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tingkat Status</label>
                         <div class="relative">
                             <select name="status" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3 pr-8 py-2 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none transition-all" required>
-                                <option value="Waspada">Waspada</option>
                                 <option value="Siaga">Siaga</option>
                                 <option value="Bahaya" selected>Bahaya</option>
                                 <option value="Normal">Normal</option>

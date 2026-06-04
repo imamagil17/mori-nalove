@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         $totalReports = \App\Models\CitizenReport::count();
         $totalBerita = \App\Models\Berita::count();
         $totalVideos = \App\Models\VideoUploadLog::count();
-        $totalAlerts = \App\Models\VideoUploadLog::whereIn('status_kondisi', ['Waspada', 'Siaga', 'Bahaya', 'WASPADA', 'SIAGA', 'BAHAYA'])->count();
+        $totalAlerts = \App\Models\VideoUploadLog::whereIn('status_kondisi', ['Siaga', 'Bahaya', 'SIAGA', 'BAHAYA', 'Waspada', 'WASPADA', 'Awas', 'AWAS'])->count();
 
         return view('admin.dashboard', compact('beritas', 'reports', 'totalReports', 'totalBerita', 'totalVideos', 'totalAlerts'));
     })->name('admin.dashboard');

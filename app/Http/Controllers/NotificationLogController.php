@@ -44,11 +44,10 @@ class NotificationLogController extends Controller
 
         // Kalkulasi simulasi angka Centimeter (cm) yang logis berdasarkan status
         $nilaiCm = 0;
-        if ($status === 'WASPADA') { 
-            $nilaiCm = rand(250, 340); 
-        } elseif ($status === 'SIAGA') { 
-            $nilaiCm = rand(350, 440); 
-        } elseif ($status === 'BAHAYA' || $status === 'MERAH') { 
+        if ($status === 'SIAGA' || $status === 'WASPADA') { 
+            $status = 'SIAGA';
+            $nilaiCm = rand(250, 440); 
+        } elseif ($status === 'BAHAYA' || $status === 'AWAS' || $status === 'MERAH') { 
             $status = 'BAHAYA';
             $nilaiCm = rand(450, 550); 
         } else { 

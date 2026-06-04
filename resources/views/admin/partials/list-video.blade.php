@@ -58,9 +58,8 @@
                             <div class="mt-2 flex items-center gap-2">
                                 @php
                                     $badgeColor = 'bg-emerald-50 text-emerald-600 border-emerald-200';
-                                    if(strtoupper($v->status_kondisi) == 'BAHAYA') $badgeColor = 'bg-red-50 text-red-600 border-red-200';
-                                    elseif(strtoupper($v->status_kondisi) == 'SIAGA') $badgeColor = 'bg-orange-50 text-orange-600 border-orange-200';
-                                    elseif(strtoupper($v->status_kondisi) == 'WASPADA') $badgeColor = 'bg-amber-50 text-amber-600 border-amber-200';
+                                    if(strtoupper($v->status_kondisi) == 'BAHAYA' || strtoupper($v->status_kondisi) == 'AWAS') $badgeColor = 'bg-red-50 text-red-600 border-red-200';
+                                    elseif(strtoupper($v->status_kondisi) == 'SIAGA' || strtoupper($v->status_kondisi) == 'WASPADA') $badgeColor = 'bg-orange-50 text-orange-600 border-orange-200';
                                 @endphp
                                 <span class="text-[10px] font-extrabold px-2 py-0.5 {{ $badgeColor }} border rounded-md uppercase tracking-wide inline-block">
                                     {{ $v->status_kondisi }}

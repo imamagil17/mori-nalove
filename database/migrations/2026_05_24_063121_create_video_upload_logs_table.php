@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('ukuran_file'); // Menyimpan informasi size (misal: 45 MB)
             $table->dateTime('waktu_rekaman'); // Tanggal & waktu rekaman diambil di lapangan
             $table->float('nilai_level')->default(0); // Hasil deteksi tinggi air dari YOLO (%)
-            $table->string('status_kondisi')->default('Normal'); // Hasil klasifikasi: Normal, Waspada, Siaga, Bahaya
+            $table->string('status_kondisi')->default('Normal'); // Hasil klasifikasi: Normal, Siaga, Bahaya
             $table->text('keterangan')->nullable(); // Catatan tambahan dari admin
             $table->timestamps();
         });

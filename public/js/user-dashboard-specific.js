@@ -12,15 +12,15 @@ function updateUserStatusPanel(level, status) {
 
     const card = document.getElementById('floodStatusCard');
 
-    if (status === 'AWAS' || level > 70) {
+    if (status === 'BAHAYA' || status === 'AWAS' || level >= 80) {
         icon.style.background    = 'linear-gradient(135deg,#ef4444,#b91c1c)';
         icon.innerHTML           = '<i data-lucide="alert-triangle" class="w-10 h-10"></i>';
-        label.textContent        = 'AWAS';
+        label.textContent        = 'BAHAYA';
         label.className          = 'text-3xl font-black text-red-600 animate-pulse';
-        desc.textContent         = 'Bahaya! Segera evakuasi ke tempat aman.';
+        desc.textContent         = 'Darurat! Segera evakuasi ke tempat aman.';
         if(bar) bar.style.background     = 'linear-gradient(90deg,#ef4444,#b91c1c)';
         if(card) card.className  = 'bg-red-500/10 backdrop-blur-md rounded-3xl p-6 shadow-[0_0_30px_rgba(239,68,68,0.3)] border border-red-500/30 flex flex-col relative overflow-hidden group transition-all duration-500';
-    } else if (status === 'SIAGA' || level > 35) {
+    } else if (status === 'SIAGA' || status === 'WASPADA' || level >= 50) {
         icon.style.background    = 'linear-gradient(135deg,#f59e0b,#d97706)';
         icon.innerHTML           = '<i data-lucide="alert-circle" class="w-10 h-10"></i>';
         label.textContent        = 'SIAGA';
@@ -31,8 +31,8 @@ function updateUserStatusPanel(level, status) {
     } else {
         icon.style.background    = 'linear-gradient(135deg,#10b981,#059669)';
         icon.innerHTML           = '<i data-lucide="check-circle" class="w-10 h-10"></i>';
-        label.textContent        = 'AMAN';
-        label.className          = 'text-3xl font-black text-slate-800';
+        label.textContent        = 'NORMAL';
+        label.className          = 'text-3xl font-black text-emerald-600';
         desc.textContent         = 'Kondisi air normal. Tidak perlu khawatir.';
         if(bar) bar.style.background     = 'linear-gradient(90deg,#10b981,#059669)';
         if(card) card.className  = 'bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/40 flex flex-col relative overflow-hidden group transition-all duration-500';
@@ -61,12 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (originalStatusTextUpdate) {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (mutation.target.innerText === 'AWAS') {
+                const text = mutation.target.innerText;
+                if (text === 'BAHAYA' || text === 'AWAS') {
                     mutation.target.className = "px-4 py-1.5 rounded-full text-sm font-extrabold bg-red-100 text-red-600 tracking-wide animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]";
-                } else if (mutation.target.innerText === 'SIAGA') {
+                } else if (text === 'SIAGA' || text === 'WASPADA') {
                     mutation.target.className = "px-4 py-1.5 rounded-full text-sm font-extrabold bg-orange-100 text-orange-600 tracking-wide";
-                } else if (mutation.target.innerText === 'WASPADA') {
-                    mutation.target.className = "px-4 py-1.5 rounded-full text-sm font-extrabold bg-yellow-100 text-yellow-600 tracking-wide";
                 } else {
                     mutation.target.className = "px-4 py-1.5 rounded-full text-sm font-extrabold bg-green-100 text-green-600 tracking-wide";
                 }

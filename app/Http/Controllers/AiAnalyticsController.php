@@ -16,7 +16,7 @@ class AiAnalyticsController extends Controller
         $currentLevel = 0;
         $predictedLevel = 0;
         $riskScore = 0;
-        $statusPrediksi = 'AMAN';
+        $statusPrediksi = 'NORMAL';
         
         if ($logs->count() > 0) {
             $currentLevel = $logs->last()->nilai_level;
@@ -62,23 +62,18 @@ class AiAnalyticsController extends Controller
         // Membatasi hasil prediksi agar tetap berada di skala rasional 0% - 100%
         $predictedLevel = max(0, min(100, round($predictedLevel, 1)));
         
-        // 🌟 LOGIKA BARU: Status & Risk Score dihitung murni dari HASIL PREDIKSI ($predictedLevel)
         if ($predictedLevel < 50) {
-            $statusPrediksi = 'AMAN';
+            $statusPrediksi = 'NORMAL';
             // Menghasilkan nilai proporsional bertahap di rentang 0 - 35
             $riskScore = round(($predictedLevel / 50) * 35); 
-        } elseif ($predictedLevel < 70) {
-            $statusPrediksi = 'WASPADA';
-            // Menghasilkan nilai proporsional bertahap di rentang 36 - 70
-            $riskScore = round(36 + (($predictedLevel - 50) / 20) * 34);
-        } elseif ($predictedLevel < 85) {
+        } elseif ($predictedLevel < 80) {
             $statusPrediksi = 'SIAGA';
-            // Menghasilkan nilai proporsional bertahap di rentang 71 - 85
-            $riskScore = round(71 + (($predictedLevel - 70) / 15) * 14);
+            // Menghasilkan nilai proporsional bertahap di rentang 36 - 79
+            $riskScore = round(36 + (($predictedLevel - 50) / 30) * 43);
         } else {
-            $statusPrediksi = 'AWAS';
-            // Menghasilkan nilai proporsional bertahap di rentang 86 - 100
-            $riskScore = round(86 + (($predictedLevel - 85) / 15) * 14);
+            $statusPrediksi = 'BAHAYA';
+            // Menghasilkan nilai proporsional bertahap di rentang 80 - 100
+            $riskScore = round(80 + (($predictedLevel - 80) / 20) * 20);
         }
         
         // Mengunci batas akhir skor risiko agar tidak melenceng dari standar 0-100

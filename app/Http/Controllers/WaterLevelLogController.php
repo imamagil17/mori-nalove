@@ -64,10 +64,10 @@ class WaterLevelLogController extends Controller
         } 
         // KONDISI 2: STATUS MERAH (Rentang 80% sampai 100%)
         elseif ($request->water_level >= 80) {
-            $message = "🚨 [DARURAT STATUS MERAH - AWAS BANJIR]\n";
+            $message = "🚨 [DARURAT STATUS MERAH - BAHAYA BANJIR]\n";
             $message .= "PERINGATAN KRITIS! Air sungai telah melewati batas aman.\n\n";
             $message .= "• Ketinggian Air: " . $request->water_level . "%\n";
-            $message .= "• Status Keamanan: AWAS (MERAH)\n";
+            $message .= "• Status Keamanan: BAHAYA (MERAH)\n";
             $message .= "• Waktu Kejadian: " . now()->format('d M Y, H:i') . " WITA\n\n";
             $message .= "❗ PERINTAH EVAKUASI: Banjir luapan besar berpotensi terjadi saat ini juga. Dimohon kepada seluruh warga di area terdampak untuk SEGERA MENINGGALKAN RUMAH DAN MENGUNGSI ke titik aman atau posko darurat sekarang!";
             
