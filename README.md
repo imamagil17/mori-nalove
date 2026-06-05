@@ -1,4 +1,4 @@
-# Flood-Vision (Sistem Mitigasi Banjir Cerdas)
+Mori Nalove (Sistem Mitigasi Banjir Cerdas)
 
 <p align="center">
   <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" /></a>
