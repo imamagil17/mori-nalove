@@ -59,7 +59,7 @@
 
         let currentIndex = 0;
         let slideInterval;
-        const intervalTime = 2000; // 2 Detik
+        const intervalTime = 7000; // 7 Detik
 
         function updateSlide() {
             track.style.transform = `translateX(-${currentIndex * 100}%)`;

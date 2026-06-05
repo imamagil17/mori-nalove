@@ -1,49 +1,94 @@
 <x-app-layout>
-    @section('title')
-    <!-- News Slider Publik di Posisi Paling Atas (Full-Width) -->
+    @section('title', 'Dashboard Pemantauan')
+
+    <!-- News Slider Publik di Posisi Paling Atas -->
     @include('user.partials.news-slider')
     
-    <div class="py-8 relative min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-20">
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch mb-8">
-                
-                <!-- Kolom Kiri: Panduan & Telegram Alert -->
+    <div class="py-8 relative min-h-screen space-y-8">
+        
+        <!-- 🌟 BARIS 1: KONTAINER ATAS (max-w-7xl) -->
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
+                <!-- Kolom Kiri -->
                 <div class="xl:col-span-1 flex flex-col space-y-8">
                     @include('user.partials.safety-guide')
                     @include('user.partials.telegram-alert')
                 </div>
 
-                <!-- Kolom Kanan: Grafik Tren Air (Dibuat membesar penuh tanpa space kosong) -->
+                <!-- Kolom Kanan: Grafik Tren Air -->
                 <div class="xl:col-span-2 flex flex-col">
                     <div class="w-full h-full flex flex-col flex-grow">
                         @include('user.partials.water-chart')
                     </div>
                 </div>
             </div>
+        </div> 
 
-            <!-- Bagian Bawah Dashboard -->
-            <div class="space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 🌟 BARIS 2: CAROUSEL MITIGASI PER KATEGORI (JEBOL FULL-WIDTH - UJUNG TAJAM) -->
+        <div class="w-full block">
+            @include('user.partials.checklist')
+        </div>
+        
+        <!-- 🌟 BARIS 3: KONTAINER BAWAH (FORM LAPOR & RIWAYAT SEBELAH-SEBELAHAN - TOTAL FLAT & FRESH) -->
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                
+                <!-- Sisi Kiri: Form Lapor Kondisi Area -->
+                <div class="flex flex-col">
                     @include('user.partials.citizen-report-form')
-                    @include('user.partials.checklist')
                 </div>
                 
-                @include('user.partials.notification-history')
-                
+                <!-- Sisi Kanan: Riwayat Peringatan Sistem -->
+                <div class="flex flex-col px-2">
+                    <!-- Header Transparan -->
+                    <div class="flex items-center gap-3 mb-5 shrink-0">
+                        <div class="p-2 bg-rose-50 text-rose-600 rounded-xl shadow-sm border border-rose-100">
+                            <i data-lucide="bell-ring" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-lg font-black text-slate-800 tracking-tight">Riwayat Peringatan Sistem</h3>
+                    </div>
+                    
+                    <!-- Area List History: Bisa Di-scroll Penuh -->
+                    <div class="flex-grow overflow-y-auto pr-2 space-y-4 custom-history-scroll" id="notificationContainer" style="max-height: 440px;">
+                        <div class="flex justify-center items-center py-4 text-slate-400">
+                            <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
+                            <span class="ml-2 text-sm font-medium">Memuat riwayat peringatan...</span>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
         </div>
+
     </div>
 
+    <!-- MODAL & WIDGET OVERLAY -->
     @include('user.partials.news-modal')
     @include('user.partials.chatbot-widget')
     @include('user.partials.map-modal')
 
     <style>
+        /* Scrollbar minimalis khusus untuk area history transparan */
+        .custom-history-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-history-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-history-scroll::-webkit-scrollbar-thumb {
+            background: rgba(203, 213, 225, 0.6);
+            border-radius: 10px;
+        }
+        .custom-history-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.8);
+        }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
         
-        /* Animasi Lambaian Tangan pada Banner */
         @keyframes wave {
             0% { transform: rotate(0deg); }
             10% { transform: rotate(14deg); }
@@ -62,7 +107,9 @@
     
     <script>
         window.onOpenCvReady = function() { console.log('OpenCV.js is ready.'); };
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     </script>
     
     <script src="{{ asset('js/classification.js') }}"></script>

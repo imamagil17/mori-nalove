@@ -1,5 +1,4 @@
-<div class="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md relative overflow-hidden">
-    
+<div class="w-full px-2">    
     @if(session('success'))
         <div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl flex items-center gap-2 text-sm font-medium animate-[slideDown_0.2s_ease-out]">
             <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
