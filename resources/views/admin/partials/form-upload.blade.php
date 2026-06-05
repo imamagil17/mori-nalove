@@ -1,12 +1,12 @@
-<section class="lg:col-span-5 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
-    <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+<section class="lg:col-span-5 bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md">
+    <h2 class="text-base font-black text-slate-800 tracking-tight mb-5 flex items-center gap-2">
         <i data-lucide="upload-cloud" class="w-5 h-5 text-blue-600"></i> Upload Video Baru
     </h2>
 
     <form id="standaloneVideoForm" class="space-y-5" action="{{ route('admin.kelola_video.store') }}" method="POST" enctype="multipart/form-data" onsubmit="showLoading(event)">
         @csrf
 
-        <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/50 rounded-2xl p-6 transition-all duration-300 text-center relative cursor-pointer group">
+        <div id="dropzone" class="border-2 border-dashed border-white/50 hover:border-blue-500 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-2xl p-6 transition-all duration-300 text-center relative cursor-pointer group">
             <input type="file" name="video_file" id="videoFileInput" accept=".mp4,.mov,.avi" class="absolute inset-0 opacity-0 cursor-pointer z-10" required>
             <div class="flex flex-col items-center justify-center relative z-0">
                 <div class="w-14 h-14 bg-blue-50 group-hover:bg-blue-100/80 rounded-2xl flex items-center justify-center text-blue-600 transition-colors mb-3">

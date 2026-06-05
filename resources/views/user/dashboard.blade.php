@@ -1,8 +1,10 @@
 <x-app-layout>
     @section('title')
+    <!-- News Slider Publik di Posisi Paling Atas (Full-Width) -->
+    @include('user.partials.news-slider')
+    
     <div class="py-8 relative min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-20">
-            
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch mb-8">
                 
                 <!-- Kolom Kiri: Panduan & Telegram Alert -->
@@ -28,9 +30,7 @@
                 
                 @include('user.partials.notification-history')
                 
-                <div class="w-full mt-8">
-                    @include('user.partials.news-slider')
-                </div>
+
             </div>
 
         </div>

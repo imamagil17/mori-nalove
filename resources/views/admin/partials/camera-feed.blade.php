@@ -1,10 +1,10 @@
-<div class="bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col relative overflow-hidden group">
+<div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex flex-col relative overflow-hidden group">
     <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-10 group-hover:bg-blue-100 transition-colors"></div>
     <div class="flex items-center gap-3 mb-5">
         <div class="p-2 bg-blue-100 text-blue-600 rounded-xl">
             <i data-lucide="video" class="w-5 h-5"></i>
         </div>
-        <h3 class="text-lg font-bold text-slate-800 tracking-tight">Live Camera Feed</h3>
+        <h3 class="text-lg font-black text-slate-800 tracking-tight">Live Camera Feed</h3>
     </div>
 
     <!-- Dropdown Pilihan Sungai Pengujian -->

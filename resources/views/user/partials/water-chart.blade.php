@@ -1,13 +1,13 @@
-<div class="bg-white/70 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-slate-200/60 flex flex-col h-full flex-grow relative group w-full">
+<div class="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex flex-col h-full flex-grow relative group w-full">
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 
     <div class="flex flex-col gap-4 mb-6 shrink-0 w-full">
         <div class="flex flex-row items-center justify-between w-full border-b border-slate-100 pb-2">
             <div class="flex items-center gap-3">
-                <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl shrink-0">
+                <div class="p-2 bg-indigo-100/80 text-indigo-600 rounded-xl shrink-0">
                     <i data-lucide="activity" class="w-5 h-5"></i>
                 </div>
-                <h3 class="text-base font-bold text-slate-800 tracking-tight whitespace-nowrap">Tren Ketinggian Air</h3>
+                <h3 class="text-base font-black text-slate-800 tracking-tight whitespace-nowrap">Tren Ketinggian Air</h3>
             </div>
             
             <div class="flex items-center gap-4 whitespace-nowrap text-[11px] font-semibold text-slate-500">

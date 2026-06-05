@@ -9,7 +9,7 @@
                     <p class="text-slate-500 mt-2">Pantau riwayat pesan peringatan dini yang dikirim otomatis oleh sistem ke grup Telegram warga.</p>
                 </div>
                 
-                <form action="{{ route('admin.notifications.test') }}" method="POST" class="w-full lg:w-auto bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-end gap-3.5 shadow-sm shrink-0">
+                <form action="{{ route('admin.notifications.test') }}" method="POST" class="w-full lg:w-auto bg-white/40 backdrop-blur-md border border-white/50 rounded-2xl p-4 flex flex-col sm:flex-row items-end gap-3.5 shadow-sm shrink-0 transition-all duration-300 hover:bg-white/60 hover:shadow-md">
                     @csrf
                     <div class="w-full sm:w-44">
                         <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Sungai</label>
@@ -69,7 +69,7 @@
                 </div>
             @endif
 
-            <div class="bg-white/80 backdrop-blur-xl border border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl p-6 overflow-hidden">
+            <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
                     <h3 class="text-xl font-bold text-slate-800">Riwayat Broadcast Sistem</h3>
                     
@@ -94,13 +94,13 @@
                     </div>
                 </div>
                 
-                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <div class="overflow-x-auto rounded-xl border border-white/40">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-50 border-b border-slate-200">
-                            <tr class="text-slate-600 text-sm">
-                                <th class="py-4 px-6 font-bold w-1/4">Waktu Penyiaran</th>
-                                <th class="py-4 px-6 font-bold w-1/2">Isi Pesan Peringatan</th>
-                                <th class="py-4 px-6 font-bold w-1/4 text-center">Status API</th>
+                        <thead class="bg-white/20 border-b border-white/40">
+                            <tr class="text-slate-800 text-sm">
+                                <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/4">Waktu Penyiaran</th>
+                                <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/2">Isi Pesan Peringatan</th>
+                                <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/4 text-center">Status API</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-sm">
@@ -108,7 +108,7 @@
                                 @php
                                     $currentStatus = strtoupper($log->status_kondisi);
                                 @endphp
-                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                <tr class="hover:bg-white/40 transition-colors duration-150 group">
                                     <td class="py-4 px-6 text-slate-500 font-medium">
                                         {{ $log->created_at->format('d M Y, H:i') }} WITA
                                     </td>
@@ -130,7 +130,7 @@
                                         @endif
                                     </td>
                                     <td class="py-4 px-6 text-center">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100/70 text-emerald-700">
                                             Terkirim ✅
                                         </span>
                                     </td>

@@ -1,4 +1,4 @@
-<div class="bg-white/70 backdrop-blur-lg border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 flex flex-col h-full flex-grow relative group w-full">
+<div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 flex flex-col h-full flex-grow relative group w-full">
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 
     <div class="flex flex-col gap-4 mb-6 shrink-0 w-full">
@@ -7,7 +7,7 @@
                 <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl shrink-0">
                     <i data-lucide="activity" class="w-5 h-5"></i>
                 </div>
-                <h3 class="text-base font-bold text-slate-800 tracking-tight whitespace-nowrap">Tren Ketinggian Air</h3>
+                <h3 class="text-base font-black text-slate-800 tracking-tight whitespace-nowrap">Tren Ketinggian Air</h3>
             </div>
             
             <div class="flex items-center gap-4 whitespace-nowrap text-[11px] font-semibold text-slate-500">

@@ -3,7 +3,7 @@
     <div class="py-8 relative min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-20">
             
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 bg-white/60 backdrop-blur-xl border border-slate-200/60 p-6 rounded-3xl shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md">
                 <div>
                     <h1 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
                         <i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-600"></i> Command Center
@@ -16,6 +16,53 @@
                     <span class="relative tracking-wide uppercase text-xs">Kelola Video YOLOv26</span>
                     <i data-lucide="arrow-right" class="w-4 h-4 relative group-hover:translate-x-1.5 transition-transform duration-300"></i>
                 </a>
+            </div>
+
+            <!-- Bento Grid Statistik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Total Laporan -->
+                <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex items-center justify-between group">
+                    <div>
+                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Total Laporan Warga</span>
+                        <h3 class="text-3xl font-black tracking-tight text-slate-800 mt-2">{{ $totalReports ?? 0 }}</h3>
+                    </div>
+                    <div class="p-3 bg-indigo-500/10 text-indigo-600 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bullhorn text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Total Berita -->
+                <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex items-center justify-between group">
+                    <div>
+                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Total Berita</span>
+                        <h3 class="text-3xl font-black tracking-tight text-slate-800 mt-2">{{ $totalBerita ?? 0 }}</h3>
+                    </div>
+                    <div class="p-3 bg-emerald-500/10 text-emerald-600 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-newspaper text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Total Video -->
+                <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex items-center justify-between group">
+                    <div>
+                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Video Teranalisis</span>
+                        <h3 class="text-3xl font-black tracking-tight text-slate-800 mt-2">{{ $totalVideos ?? 0 }}</h3>
+                    </div>
+                    <div class="p-3 bg-blue-500/10 text-blue-600 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-video text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Total Peringatan -->
+                <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex items-center justify-between group">
+                    <div>
+                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Peringatan Darurat</span>
+                        <h3 class="text-3xl font-black tracking-tight text-slate-800 mt-2">{{ $totalAlerts ?? 0 }}</h3>
+                    </div>
+                    <div class="p-3 bg-rose-500/10 text-rose-600 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bell text-lg"></i>
+                    </div>
+                </div>
             </div>
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
                 

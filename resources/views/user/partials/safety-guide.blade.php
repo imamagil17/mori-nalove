@@ -1,9 +1,9 @@
-<div class="bg-white/70 backdrop-blur-md rounded-3xl p-4 md:p-6 shadow-sm border border-slate-200/60 relative overflow-hidden">
+<div class="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md relative overflow-hidden flex-grow flex flex-col justify-between">
     <div class="flex items-center gap-3 mb-4">
-        <div class="p-2 bg-amber-100 text-amber-600 rounded-xl">
+        <div class="p-2 bg-amber-100/80 text-amber-600 rounded-xl">
             <i data-lucide="life-buoy" class="w-5 h-5"></i>
         </div>
-        <h3 class="text-base font-bold text-slate-800">Panduan Keselamatan</h3>
+        <h3 class="text-base font-extrabold text-slate-800 tracking-tight">Panduan Keselamatan</h3>
     </div>
     <ul class="space-y-3" id="safetyGuide">
         <li class="flex items-start gap-3 text-sm">

@@ -8,7 +8,6 @@ use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\AiAnalyticsController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\NotificationLogController;
-use App\Http\Controllers\WaterLevelLogController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CitizenReportController;
 use App\Http\Controllers\VideoUploadController;
@@ -36,9 +35,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/admin/notifications', [NotificationLogController::class, 'index'])->name('admin.notifications.index');
     Route::post('/admin/notifications/test', [NotificationLogController::class, 'testSend'])->name('admin.notifications.test');
 
-    Route::get('/admin/water-logs', [WaterLevelLogController::class, 'index'])->name('admin.water_logs.index');
-    Route::get('/admin/water-logs/create', [WaterLevelLogController::class, 'create'])->name('admin.water_logs.create');
-    Route::post('/admin/water-logs', [WaterLevelLogController::class, 'store'])->name('admin.water_logs.store');
+
 
     // CRUD Berita Admin
     Route::get('/admin/berita', [BeritaController::class, 'index'])->name('admin.berita.index');

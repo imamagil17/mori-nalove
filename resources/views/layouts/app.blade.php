@@ -135,7 +135,7 @@
 
                     <!-- Admin Footer -->
                     <footer class="border-t border-slate-200/60 bg-white/40 backdrop-blur-md py-6 text-center mt-auto shrink-0">
-                        <p class="text-slate-500 text-xs font-semibold">&copy; 2026 Mori Nalove System &mdash; Panel Admin Cerdas.</p>
+                        <p class="text-slate-500 text-xs font-semibold">&copy; 2026 Mori Nalove System &mdash; Panel Admin</p>
                     </footer>
                 </div>
             </div>

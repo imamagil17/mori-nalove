@@ -1,7 +1,7 @@
 <div class="lg:col-span-7 space-y-8">
     
-    <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm flex flex-col relative overflow-hidden" id="yoloPreviewCard">
-        <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+    <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex flex-col relative overflow-hidden" id="yoloPreviewCard">
+        <h2 class="text-base font-black text-slate-800 tracking-tight mb-4 flex items-center gap-2">
             <i data-lucide="scan" class="w-5 h-5 text-indigo-600 animate-pulse"></i> Status Proses AI YOLO
         </h2>
         
@@ -25,9 +25,9 @@
         </div>
     </div>
 
-    <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm flex flex-col">
+    <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex flex-col">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-            <h2 class="text-base font-bold text-slate-800">Riwayat Video Tersimpan</h2>
+            <h2 class="text-base font-black text-slate-800 tracking-tight">Riwayat Video Tersimpan</h2>
             
             <div class="relative w-full sm:w-60 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex items-center gap-2 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all">
                 <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
@@ -37,9 +37,9 @@
 
         <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="videoListContainer">
             @forelse($videos as $v)
-                <div class="flex items-center justify-between p-4 bg-white border border-slate-100 hover:border-blue-200 hover:bg-blue-50/20 rounded-2xl transition-all video-card-item" data-name="{{ strtolower($v->nama_sungai . ' ' . $v->file_video) }}">
+                <div class="flex items-center justify-between p-4 bg-white/30 border border-white/40 hover:bg-white/50 backdrop-blur-sm rounded-2xl transition-all video-card-item" data-name="{{ strtolower($v->nama_sungai . ' ' . $v->file_video) }}">
                     <div class="flex items-center gap-4 min-w-0">
-                        <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-slate-400 shrink-0 shadow-sm relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-xl bg-slate-900/80 flex items-center justify-center text-slate-400 shrink-0 shadow-sm relative overflow-hidden">
                             <i data-lucide="video" class="w-5 h-5"></i>
                         </div>
                         <div class="min-w-0">
@@ -57,11 +57,11 @@
                             </div>
                             <div class="mt-2 flex items-center gap-2">
                                 @php
-                                    $badgeColor = 'bg-emerald-50 text-emerald-600 border-emerald-200';
-                                    if(strtoupper($v->status_kondisi) == 'BAHAYA' || strtoupper($v->status_kondisi) == 'AWAS') $badgeColor = 'bg-red-50 text-red-600 border-red-200';
-                                    elseif(strtoupper($v->status_kondisi) == 'SIAGA' || strtoupper($v->status_kondisi) == 'WASPADA') $badgeColor = 'bg-orange-50 text-orange-600 border-orange-200';
+                                    $badgeColor = 'bg-emerald-100/70 text-emerald-700';
+                                    if(strtoupper($v->status_kondisi) == 'BAHAYA' || strtoupper($v->status_kondisi) == 'AWAS') $badgeColor = 'bg-red-100/70 text-red-700';
+                                    elseif(strtoupper($v->status_kondisi) == 'SIAGA' || strtoupper($v->status_kondisi) == 'WASPADA') $badgeColor = 'bg-orange-100/70 text-orange-700';
                                 @endphp
-                                <span class="text-[10px] font-extrabold px-2 py-0.5 {{ $badgeColor }} border rounded-md uppercase tracking-wide inline-block">
+                                <span class="text-[10px] font-extrabold px-2.5 py-0.5 {{ $badgeColor }} rounded-full uppercase tracking-wide inline-block">
                                     {{ $v->status_kondisi }}
                                 </span>
                                 
