@@ -1,12 +1,23 @@
 @if(auth()->check() && auth()->user()->role === 'admin')
-    <aside id="sidebarAdmin" class="-translate-x-full fixed z-50 md:translate-x-0 md:relative w-64 min-h-screen bg-white text-slate-700 border-r border-slate-200 transition-all duration-300 flex flex-col shrink-0 shadow-sm">
+    <div class="w-full h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:hidden fixed top-0 left-0 z-40 shadow-sm">
+        <div class="flex items-center gap-2">
+            <img src="{{ asset('img/logo-mori-nalove.png') }}" alt="Mori Nalove Logo" class="h-7 w-auto object-contain">
+        </div>
+        <button onclick="toggleMobileSidebar()" class="p-2 text-slate-600 hover:bg-slate-100 active:bg-slate-200 rounded-xl border border-slate-200/60 shadow-inner transition-colors">
+            <i class="fa-solid fa-bars text-base"></i>
+        </button>
+    </div>
+
+    <aside id="sidebarAdmin" class="-translate-x-full fixed md:translate-x-0 md:relative top-0 left-0 z-50 w-64 h-screen bg-white text-slate-700 border-r border-slate-200 transition-all duration-300 flex flex-col shrink-0 shadow-xl md:shadow-sm">
         
-        <!-- 🌟 LOGO FIX: Dibuat center sempurna ke tengah di semua ukuran layar -->
-        <div id="btnToggleSidebar" class="h-16 flex items-center justify-center px-4 border-b border-slate-100 shrink-0 w-full cursor-pointer hover:bg-slate-50/80 transition-colors">
-            <img src="{{ asset('img/logo-mori-nalove.png') }}" alt="Mori Nalove Logo" class="h-9 w-auto object-contain shrink-0 mx-auto">
+        <div class="h-16 flex items-center justify-between md:justify-center px-4 border-b border-slate-100 shrink-0 w-full">
+            <img src="{{ asset('img/logo-mori-nalove.png') }}" alt="Mori Nalove Logo" class="h-9 w-auto object-contain shrink-0 md:mx-auto">
+            
+            <button onclick="toggleMobileSidebar()" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg md:hidden">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
         </div>
 
-        <!-- MENU ITEMS NAVIGASI -->
         <div class="flex-grow py-6 px-4 space-y-1.5 overflow-y-auto hide-scrollbar">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl font-bold text-sm transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10' : 'hover:bg-slate-50 hover:text-blue-600 text-slate-500' }}">
                 <i class="fa-solid fa-house text-lg w-5 text-center shrink-0"></i>
@@ -34,7 +45,6 @@
             </a>
         </div>
 
-        <!-- PROFILE DROPDOWN MENU (BOTTOM) -->
         <div class="p-4 pt-0 mt-auto shrink-0">
             <div x-data="{ open: false }" class="relative">
                 <div x-show="open" @click.away="open = false" 
@@ -75,4 +85,22 @@
             </div>
         </div>
     </aside>
+
+    <script>
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebarAdmin');
+            if (sidebar) {
+                sidebar.classList.toggle('-translate-x-full');
+            }
+        }
+    </script>
+
+    <style>
+        @media (max-w: 767px) {
+            /* Jalankan rule ini hanya ketika dibuka dari layar HP */
+            body, .py-8, .min-h-screen {
+                padding-top: 4rem !important; /* Memberi ruang 64px agar konten Command Center turun di bawah Navbar HP */
+            }
+        }
+    </style>
 @endif

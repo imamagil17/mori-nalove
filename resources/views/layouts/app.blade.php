@@ -154,7 +154,6 @@
                         <!-- Kanan: Tombol Login Admin Tersembunyi Presisi -->
                         <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-blue-600 text-xs font-bold transition-all shadow-sm">
                             <i class="fa-solid fa-lock"></i>
-                            <span>Login Admin</span>
                         </a>
                     </div>
                 </header>
