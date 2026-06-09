@@ -55,7 +55,7 @@
                             
                             <!-- Pelapor -->
                             <td class="px-6 py-4 text-sm font-extrabold text-slate-700 whitespace-nowrap">
-                                {{ $report->user ? $report->user->name : 'Anonim' }}
+                                {{ $report->nama_pelapor ?: ($report->user ? $report->user->name : 'Anonim') }}
                             </td>
                             
                             <!-- Lokasi -->

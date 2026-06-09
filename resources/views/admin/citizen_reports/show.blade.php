@@ -44,7 +44,7 @@
                             </div>
                             <div class="bg-white/30 backdrop-blur-sm p-4 rounded-2xl border border-white/40 shadow-sm">
                                 <span class="text-[10px] uppercase font-extrabold text-slate-400 block mb-1">Pelapor</span>
-                                <span class="text-sm font-bold text-slate-700">{{ $report->user ? $report->user->name : 'Anonim' }}</span>
+                                <span class="text-sm font-bold text-slate-700">{{ $report->user ? $report->user->name : ($report->nama_pelapor ?: 'Anonim') }}</span>
                             </div>
                             <div class="bg-white/30 backdrop-blur-sm p-4 rounded-2xl border border-white/40 shadow-sm">
                                 <span class="text-[10px] uppercase font-extrabold text-slate-400 block mb-1">Lokasi (Aliran Sungai)</span>
@@ -81,6 +81,28 @@
                                 @endif
                             </div>
                         </div>
+
+                        @if($report->status == 'Pending')
+                            <div class="flex flex-col sm:flex-row items-center justify-end gap-3 mt-6 pt-6 border-t border-slate-200/40">
+                                <!-- Tombol Tolak Laporan -->
+                                <form action="{{ route('admin.citizen_reports.destroy', $report->id) }}" method="POST" class="m-0 w-full sm:w-auto" onsubmit="return confirm('Apakah Anda yakin ingin menolak dan menghapus laporan ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="trash-2" class="w-4 h-4 shrink-0"></i> Tolak Laporan
+                                    </button>
+                                </form>
+
+                                <!-- Tombol Setujui Laporan -->
+                                <form action="{{ route('admin.citizen_reports.verify', $report->id) }}" method="POST" class="m-0 w-full sm:w-auto" onsubmit="verifyLoading(event)">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                                        <i data-lucide="check-check" class="w-4 h-4 shrink-0"></i> Setujui Laporan
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -90,5 +112,18 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
+
+        function verifyLoading(event) {
+            const form = event.currentTarget;
+            const btn = form.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin shrink-0"></i> Memproses...`;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        }
     </script>
 </x-app-layout>

@@ -45,13 +45,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::delete('/admin/berita/{id}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
     // CRUD Laporan Warga di Sisi Admin
-    Route::post('/admin/reports/{id}/verify', [CitizenReportController::class, 'verify'])->name('admin.reports.verify');
-    Route::delete('/admin/reports/{id}', [CitizenReportController::class, 'destroy'])->name('admin.reports.destroy');
-    Route::get('/admin/citizen-reports/{id}', function ($id) {
-        $report = \App\Models\CitizenReport::with('user')->findOrFail($id);
-        return view('admin.citizen_reports.show', compact('report'));
-    })->name('admin.citizen_reports.show');
-    Route::get('/admin/citizen-reports', [CitizenReportController::class, 'index'])->name('admin.citizen_reports.index');
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('citizen_reports', CitizenReportController::class);
+        Route::patch('citizen_reports/{id}/verify', [CitizenReportController::class, 'verify'])->name('citizen_reports.verify');
+    });
 
     Route::get('/admin/videos/kelola-video', [VideoUploadController::class, 'index'])->name('admin.kelola_video.index');
     Route::post('/admin/videos/kelola-video', [VideoUploadController::class, 'store'])->name('admin.kelola_video.store');

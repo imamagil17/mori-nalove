@@ -101,8 +101,8 @@
         }
 
         // Set Forms Action
-        document.getElementById('formTolak').action = `/admin/reports/${id}`;
-        document.getElementById('formVerifikasi').action = `/admin/reports/${id}/verify`;
+        document.getElementById('formTolak').action = `/admin/citizen_reports/${id}`;
+        document.getElementById('formVerifikasi').action = `/admin/citizen_reports/${id}/verify`;
 
         // Actions container visibility based on status
         const actions = document.getElementById('detailActions');

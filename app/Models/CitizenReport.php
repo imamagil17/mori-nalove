@@ -11,6 +11,7 @@ class CitizenReport extends Model
 
     protected $fillable = [
         'user_id',
+        'nama_pelapor',
         'lokasi',
         'tingkat_genangan',
         'deskripsi',
