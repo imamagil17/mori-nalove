@@ -6,7 +6,7 @@
             </div>
             <h3 class="text-sm font-black text-slate-800 tracking-tight">Laporan Darurat Baru</h3>
         </div>
-        <a href="{{ route('admin.citizen_reports.index') }}" class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors">
+        <a href="/admin/citizen_reports" class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors">
             Kelola <i data-lucide="arrow-right" class="w-3 h-3"></i>
         </a>
     </div>
@@ -37,13 +37,14 @@
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <a href="{{ route('admin.citizen_reports.show', $report->id) }}" class="px-2.5 py-1 text-[10px] font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <a href="/admin/citizen_reports/{{ $report->id }}" class="px-2.5 py-1 text-[10px] font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1 shadow-sm">
                         <i data-lucide="eye" class="w-3 h-3"></i> Lihat Detail
                     </a>
                 </div>
             </div>
-            <p class="text-xs text-slate-500 mt-2 truncate">{{ $report->deskripsi ?: 'Tanpa catatan' }}</p>
+            <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-wider">Pelapor: <span class="text-slate-600 font-extrabold">{{ $report->nama_pelapor ?: 'Anonim' }}</span></p>
+            <p class="text-xs text-slate-500 mt-0.5 truncate">{{ $report->deskripsi ?: 'Tanpa catatan' }}</p>
         </div>
         @empty
         <div class="text-center py-6 text-slate-400 text-xs">Belum ada laporan terbaru.</div>

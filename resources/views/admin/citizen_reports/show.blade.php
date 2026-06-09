@@ -6,7 +6,7 @@
                 
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('admin.citizen_reports.index') }}" class="p-3 bg-white/40 hover:bg-white/60 text-slate-600 rounded-2xl border border-white/50 shadow-sm transition-colors">
+                        <a href="/admin/citizen_reports" class="p-3 bg-white/40 hover:bg-white/60 text-slate-600 rounded-2xl border border-white/50 shadow-sm transition-colors">
                             <i data-lucide="arrow-left" class="w-5 h-5"></i>
                         </a>
                         <div>
@@ -17,7 +17,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Kiri: Foto Bukti -->
                     <div>
                         <span class="text-xs uppercase font-extrabold text-slate-400 block mb-3">Foto Bukti Lapangan</span>
                         @if($report->foto_bukti)
@@ -35,7 +34,6 @@
                         @endif
                     </div>
 
-                    <!-- Kanan: Detail Informasi -->
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="bg-white/30 backdrop-blur-sm p-4 rounded-2xl border border-white/40 shadow-sm">
@@ -84,8 +82,7 @@
 
                         @if($report->status == 'Pending')
                             <div class="flex flex-col sm:flex-row items-center justify-end gap-3 mt-6 pt-6 border-t border-slate-200/40">
-                                <!-- Tombol Tolak Laporan -->
-                                <form action="{{ route('admin.citizen_reports.destroy', $report->id) }}" method="POST" class="m-0 w-full sm:w-auto" onsubmit="return confirm('Apakah Anda yakin ingin menolak dan menghapus laporan ini?');">
+                                <form action="/admin/citizen_reports/{{ $report->id }}" method="POST" class="m-0 w-full sm:w-auto" onsubmit="return confirm('Apakah Anda yakin ingin menolak dan menghapus laporan ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
@@ -93,10 +90,8 @@
                                     </button>
                                 </form>
 
-                                <!-- Tombol Setujui Laporan -->
-                                <form action="{{ route('admin.citizen_reports.verify', $report->id) }}" method="POST" class="m-0 w-full sm:w-auto" onsubmit="verifyLoading(event)">
+                                <form action="/admin/citizen_reports/{{ $report->id }}/verify" method="POST" class="m-0 w-full sm:w-auto" onsubmit="verifyLoading(event)">
                                     @csrf
-                                    @method('PATCH')
                                     <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
                                         <i data-lucide="check-check" class="w-4 h-4 shrink-0"></i> Setujui Laporan
                                     </button>

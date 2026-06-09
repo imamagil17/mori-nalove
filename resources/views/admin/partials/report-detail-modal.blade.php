@@ -1,7 +1,5 @@
-<!-- Modal Detail Laporan Warga Shared -->
 <div id="modalDetailReport" class="fixed inset-0 z-[100] hidden bg-slate-900/85 backdrop-blur-sm flex-col items-center justify-center p-4 transition-opacity duration-300 opacity-0">
     <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] transform scale-95 transition-transform duration-300" id="modalDetailReportContent">
-        <!-- Header -->
         <div class="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/80">
             <div class="flex items-center gap-2">
                 <i data-lucide="clipboard-list" class="w-5 h-5 text-blue-600"></i>
@@ -12,9 +10,7 @@
             </button>
         </div>
 
-        <!-- Body -->
         <div class="overflow-y-auto p-6 space-y-6 bg-white flex-grow">
-            <!-- Image Bukti -->
             <div id="detailFotoContainer" class="w-full h-72 rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative group bg-slate-50">
                 <img id="detailFoto" src="" class="w-full h-full object-cover" alt="Foto Bukti">
                 <a id="detailFotoLink" href="" target="_blank" class="absolute bottom-4 right-4 bg-slate-900/80 hover:bg-slate-900 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold transition-colors flex items-center gap-1.5 shadow-md">
@@ -22,7 +18,6 @@
                 </a>
             </div>
 
-            <!-- Detail Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100 shadow-sm">
                     <span class="text-[9px] uppercase font-extrabold text-slate-400 block mb-1">Tanggal Laporan</span>
@@ -48,7 +43,6 @@
             </div>
         </div>
 
-        <!-- Footer / Action Buttons -->
         <div class="p-5 border-t border-slate-100 bg-slate-50/80 flex justify-end gap-3" id="detailActions">
             <form id="formTolak" action="" method="POST" class="m-0" onsubmit="return confirm('Apakah Anda yakin ingin menolak dan menghapus laporan ini secara permanen?');">
                 @csrf
@@ -72,7 +66,7 @@
 <script>
     function openModalDetail(id, tanggal, pelapor, lokasi, genangan, deskripsi, fotoBukti, status) {
         document.getElementById('detailTanggal').textContent = tanggal + ' WITA';
-        document.getElementById('detailPelapor').textContent = pelapor;
+        document.getElementById('detailPelapor').textContent = pelapor || 'Anonim';
         document.getElementById('detailLokasi').textContent = lokasi;
         document.getElementById('detailDeskripsi').textContent = deskripsi || 'Tidak ada catatan tambahan.';
 
@@ -100,7 +94,7 @@
             fotoContainer.style.display = 'none';
         }
 
-        // Set Forms Action
+        // 🌟 FIX SAKTI: URL Target Aksi Menggunakan Rute Mentah Langsung
         document.getElementById('formTolak').action = `/admin/citizen_reports/${id}`;
         document.getElementById('formVerifikasi').action = `/admin/citizen_reports/${id}/verify`;
 
