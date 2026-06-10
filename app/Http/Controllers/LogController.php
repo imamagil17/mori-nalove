@@ -87,21 +87,6 @@ class LogController extends Controller
             $message .= "• Waktu Kejadian: " . $waktu . "\n\n";
             $message .= "PERINTAH EVAKUASI: Dimohon kepada seluruh warga di sekitar aliran " . $namaSungai . " untuk tetap siaga dan bersiap evakuasi mandiri jika kondisi terus meningkat!";
 
-            // Simulasikan juga log upload video agar datanya terikat di table riwayat visual admin
-            try {
-                \App\Models\VideoUploadLog::create([
-                    'nama_sungai' => $namaSungai,
-                    'file_video' => 'camera_feed_simulation.mp4',
-                    'ukuran_file' => '0 MB',
-                    'waktu_rekaman' => now(),
-                    'nilai_level' => $nilaiCm,
-                    'status_kondisi' => $status,
-                    'keterangan' => 'Deteksi otomatis Canny Edge Camera aktif.'
-                ]);
-            } catch (\Exception $e) {
-                // Ignore
-            }
-
             try {
                 $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
                     'chat_id' => $chatId,

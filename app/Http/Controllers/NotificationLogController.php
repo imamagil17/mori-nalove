@@ -118,16 +118,6 @@ class NotificationLogController extends Controller
             ]);
 
             if ($response->successful()) {
-                // Catat log simulasi ke tabel VideoUploadLog agar sinkron masuk ke dashboard utama
-                \App\Models\VideoUploadLog::create([
-                    'nama_sungai' => $namaSungai,
-                    'file_video' => 'bot_test_simulation.mp4',
-                    'ukuran_file' => '0 MB',
-                    'waktu_rekaman' => now()->toDateString(),
-                    'nilai_level' => $nilaiCm,
-                    'status_kondisi' => $status,
-                    'keterangan' => 'Uji Coba Pengiriman Pesan Bot Telegram Berhasil.'
-                ]);
 
                 // Masukkan log ke tabel NotificationLog agar terdaftar di rekap log broadcast
                 NotificationLog::create([
