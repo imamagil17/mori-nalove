@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('log_deteksis', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_sungai')->default('Sungai Gumbasa'); // [PERBAIKAN]
             $table->string('status');
-            $table->float('nilai_level');
+            $table->decimal('nilai_level', 8, 2);
             $table->timestamps();
         });
     }
