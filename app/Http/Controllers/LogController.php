@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LogDeteksi;
-use App\Models\NotificationLog; // Wajib ditambahkan untuk catat riwayat notif
-use Illuminate\Support\Facades\Http; // Wajib ditambahkan untuk nembak API Telegram
+use App\Models\NotificationLog; 
+use Illuminate\Support\Facades\Http; 
 
 class LogController extends Controller
 {
@@ -26,12 +26,6 @@ class LogController extends Controller
             'status' => 'required|string',
             'nilai_level' => 'required|numeric',
             'sungai' => 'nullable|string',
-        ]);
-
-        // Simpan data log deteksi ke database
-        $log = LogDeteksi::create([
-            'status' => $request->status,
-            'nilai_level' => $request->nilai_level,
         ]);
 
         // ── DATABASE ATURAN AMBANG BATAS DINAMIS PER SUNGAI ──
@@ -64,6 +58,15 @@ class LogController extends Controller
         } else {
             $status = 'NORMAL';
         }
+
+        // ====================================================
+        // --- PERBAIKAN: SIMPAN LOG DETEKSI SETELAH DIKONVERSI ---
+        // ====================================================
+        $log = LogDeteksi::create([
+            'nama_sungai' => $namaSungai,
+            'status'      => strtoupper($status), // Normalisasi string huruf besar
+            'nilai_level' => $nilaiCm,            // Disimpan sebagai CM untuk konsistensi analitik
+        ]);
 
         // ====================================================
         // --- MULAI KODE OTOMATISASI TELEGRAM ---
@@ -130,7 +133,7 @@ class LogController extends Controller
     }
 
     // ====================================================
-    // --- TAMBAHAN BARU: FETCH NOTIFIKASI UNTUK MADING ---
+    // --- FETCH NOTIFIKASI UNTUK MADING ---
     // ====================================================
     public function notifications()
     {
@@ -142,4 +145,4 @@ class LogController extends Controller
             'data' => $notifs
         ]);
     }
-}   
+}
