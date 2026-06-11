@@ -84,6 +84,6 @@ Route::get('/api/analytics', [AiAnalyticsController::class, 'index'])->name('ana
 // RUTE CHATBOT REVISI (Mendukung GET/POST Publik untuk Koneksi Groq Llama 3.3)
 Route::match(['get', 'post'], '/api/chat', [ChatbotController::class, 'ask'])->name('chat.ask');
 
-
+Route::post('/laporan-warga/kirim', [CitizenReportController::class, 'store'])->name('reports.store');
 // 6. Jalur Otentikasi Bawaan Laravel Breeze
 require __DIR__.'/auth.php';

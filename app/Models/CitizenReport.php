@@ -10,13 +10,20 @@ class CitizenReport extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'nama_pelapor',
-        'lokasi',
-        'tingkat_genangan',
-        'deskripsi',
-        'status',
-        'foto_bukti',
+        'nama_pelapor', 
+        'kecamatan_desa',     
+        'lokasi',             
+        'koordinat_lokasi',   
+        'tingkat_genangan',   
+        'deskripsi', 
+        'jumlah_terdampak',   
+        'fasilitas_rusak',    
+        'foto_bukti', 
+        'status'
+    ];
+
+    protected $casts = [
+        'foto_bukti' => 'array', // Beritahu Laravel ini adalah kumpulan banyak file (Array)
     ];
 
     public function user()

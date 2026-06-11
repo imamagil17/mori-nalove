@@ -1,85 +1,120 @@
-<div class="w-full px-2">    
-    @if(session('success'))
-        <div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl flex items-center gap-2 text-sm font-medium animate-[slideDown_0.2s_ease-out]">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-2 text-sm font-medium animate-[slideDown_0.2s_ease-out]">
-            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
+<form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    @csrf
 
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2 sm:gap-0">
-        <div class="flex items-center gap-3">
-            <div class="p-2 bg-indigo-100/80 text-indigo-600 rounded-xl">
-                <i data-lucide="megaphone" class="w-5 h-5"></i>
-            </div>
-            <h3 class="text-base font-extrabold text-slate-800 tracking-tight">Lapor Kondisi Area</h3>
+    <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Pelapor (Wajib)</label>
+        <input type="text" name="nama_pelapor" required placeholder="Masukkan nama lengkap Anda..."
+            class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Kecamatan / Desa (Wajib)</label>
+            <input type="text" name="kecamatan_desa" required placeholder="Contoh: Kec. Dolo Barat, Desa Loru"
+                class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Detail Sungai / Sub-DAS (Wajib)</label>
+            <input type="text" name="lokasi" required placeholder="Contoh: Sub-DAS Jauh"
+                class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
         </div>
     </div>
-    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Laporkan jika terjadi genangan air abnormal di wilayah Anda.</p>
-    
-    <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-        @csrf 
 
-        <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-                <i class="text-slate-400"></i> Nama Pelapor (Wajib)
-            </label>
-            <input type="text" name="nama_pelapor" value="{{ old('nama_pelapor') }}" placeholder="Masukkan nama lengkap Anda..." required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
-            @error('nama_pelapor')
-                <p class="text-red-500 text-[10px] mt-1 font-semibold">{{ $message }}</p>
-            @enderror
+    <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
+        <label class="block text-xs font-bold text-indigo-700 mb-1">Titik Koordinat GPS (Wajib)</label>
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="koordinat_lokasi" name="koordinat_lokasi" readonly required
+                placeholder="Klik tombol Ambil GPS..."
+                class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-sm text-slate-600 focus:outline-none">
+            <button type="button" onclick="dapatkanLokasiGPS()"
+                class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition shrink-0 shadow-md flex items-center justify-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                </svg>
+                Ambil GPS
+            </button>
         </div>
+        <p id="pesan_gps" class="text-[10px] text-amber-600 mt-1.5 font-semibold hidden">Meminta akses lokasi...</p>
+    </div>
 
+    <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Tingkat Genangan (Wajib)</label>
+        <select name="tingkat_genangan" required
+            class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+            <option value="" disabled selected>-- Pilih Perkiraan Ketinggian Air --</option>
+            <option value="Rendah">Rendah / Aman (Semata kaki)</option>
+            <option value="Sedang">Sedang / Siaga (Selutut)</option>
+            <option value="Tinggi">Tinggi / Bahaya (Sepinggang atau lebih)</option>
+        </select>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Detail (Sungai)</label>
-            <select name="lokasi" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
-                <option value="" disabled selected>Pilih Aliran Sungai...</option>
-                <option value="Sungai Gumbasa">Wilayah Sekitar Aliran Sungai Gumbasa</option>
-                <option value="Sungai Lariang">Wilayah Sekitar Aliran Sungai Lariang</option>
-                <option value="Sungai Lindu">Wilayah Sekitar Aliran Sungai Lindu</option>
-                <option value="Sungai Samba">Wilayah Sekitar Aliran Sungai Samba</option>
-                <option value="Sungai Pakuli">Wilayah Sekitar Aliran Sungai Pakuli</option>
-                <option value="Sungai Marawola">Wilayah Sekitar Aliran Sungai Marawola</option>
-                <option value="Sungai Palolo">Wilayah Sekitar Aliran Sungai Palolo</option>
-                <option value="Sungai Kulawi">Wilayah Sekitar Aliran Sungai Kulawi</option>
-                <option value="Sungai Ngatabaru">Wilayah Sekitar Aliran Sungai Ngatabaru</option>
-                <option value="Sungai Wuno">Wilayah Sekitar Aliran Sungai Wuno</option>
-                <option value="Sungai Bangga">Wilayah Sekitar Aliran Sungai Bangga</option>
-            </select>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Warga Terdampak (Opsional)</label>
+            <input type="number" name="jumlah_terdampak" placeholder="Contoh: 15 (Jiwa)"
+                class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
         </div>
-        
         <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Tingkat Genangan</label>
-            <select name="tingkat_genangan" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none appearance-none">
-                <option value="" disabled selected>Pilih Dampak Luapan...</option>
-                <option value="Rendah">Rendah (Aman / Genangan Hujan Biasa)</option>
-                <option value="Sedang">Sedang (Waspada / Air Masuk Jalan hingga Selutut)</option>
-                <option value="Tinggi">Tinggi (Bahaya / Banjir Kritis Sepinggang atau Lebih)</option>
-            </select>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Fasilitas Rusak (Opsional)</label>
+            <input type="text" name="fasilitas_rusak" placeholder="Contoh: 1 Jembatan Putus"
+                class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
         </div>
-        
-        <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Tambahan (Opsional)</label>
-            <textarea name="deskripsi" rows="2" placeholder="Cth: Air sudah masuk ke pemukiman di Desa Oluboju, butuh bantuan evakuasi lansia..." class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none resize-none"></textarea>
-        </div>
-        
-        <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-                <i class="fa-solid fa-camera text-slate-400"></i> Foto Bukti Kondisi (Wajib)
-            </label>
-            <input type="file" name="foto_bukti" accept="image/*" required class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-            @error('foto_bukti')
-                <p class="text-red-500 text-[10px] mt-1 font-semibold">{{ $message }}</p>
-            @enderror
-        </div>
-        
-        <button type="submit" onclick="this.innerHTML='<i data-lucide=\'loader-2\' class=\'w-4 h-4 animate-spin\'></i> Mengirim...'; this.classList.add('opacity-75', 'cursor-wait'); lucide.createIcons();" class="w-full py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-            <i data-lucide="send" class="w-4 h-4"></i> Kirim Laporan Warga
-        </button>
-    </form>
-</div>
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan / Kondisi Air (Wajib)</label>
+        <textarea name="deskripsi" required rows="3" placeholder="Gambarkan situasi genangan air secara singkat..."
+            class="w-full bg-white/60 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+    </div>
+
+    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <label class="block text-xs font-bold text-slate-700 mb-1">Foto Bukti Lapangan (Bisa lebih dari 1, Max
+            5)</label>
+        <input type="file" name="foto_bukti[]" multiple required accept="image/*"
+            class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 cursor-pointer">
+        <p class="text-[10px] text-slate-500 mt-1.5">*Tahan tombol <span class="font-bold text-slate-700">CTRL</span>
+            (di PC) atau tahan gambar (di HP) untuk memilih beberapa foto sekaligus.</p>
+    </div>
+
+    <button type="submit"
+        class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black py-3 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        Kirim Laporan Bencana
+    </button>
+</form>
+
+<script>
+    function dapatkanLokasiGPS() {
+        const pesanGps = document.getElementById('pesan_gps');
+        const inputGps = document.getElementById('koordinat_lokasi');
+
+        pesanGps.classList.remove('hidden');
+        pesanGps.innerText = "Mencari satelit lokasi Anda...";
+        pesanGps.className = "text-[10px] text-amber-600 mt-1.5 font-semibold";
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    inputGps.value = position.coords.latitude + ", " + position.coords.longitude;
+                    pesanGps.innerText = "Lokasi berhasil ditemukan! ✅";
+                    pesanGps.className = "text-[10px] text-emerald-600 mt-1.5 font-semibold";
+                },
+                function(error) {
+                    pesanGps.innerText =
+                        "Gagal mengambil lokasi. Pastikan GPS/Location Anda aktif dan diizinkan pada browser! ❌";
+                    pesanGps.className = "text-[10px] text-red-600 mt-1.5 font-semibold";
+                }, {
+                    enableHighAccuracy: true
+                } // Memaksa akurasi tinggi GPS
+            );
+        } else {
+            pesanGps.innerText = "Browser Anda tidak mendukung pelacakan lokasi. ❌";
+            pesanGps.className = "text-[10px] text-red-600 mt-1.5 font-semibold";
+        }
+    }
+</script>
