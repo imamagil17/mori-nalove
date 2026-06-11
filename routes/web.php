@@ -75,7 +75,6 @@ Route::middleware('auth')->group(function () {
 
 // 5. Kelompok Rute Jalur API & Sistem Integrasi Perangkat Cerdas
 Route::get('/api/logs', [LogController::class, 'index'])->name('logs.index');
-Route::post('/api/logs', [LogController::class, 'store'])->name('logs.store');
 
 Route::get('/api/notifications', [LogController::class, 'notifications'])->name('notifications.index');
 
@@ -85,7 +84,6 @@ Route::get('/api/analytics', [AiAnalyticsController::class, 'index'])->name('ana
 // RUTE CHATBOT REVISI (Mendukung GET/POST Publik untuk Koneksi Groq Llama 3.3)
 Route::match(['get', 'post'], '/api/chat', [ChatbotController::class, 'ask'])->name('chat.ask');
 
-Route::post('/api/reports', [CitizenReportController::class, 'store'])->name('reports.store');
-
+Route::post('/laporan-warga/kirim', [CitizenReportController::class, 'store'])->name('reports.store');
 // 6. Jalur Otentikasi Bawaan Laravel Breeze
 require __DIR__.'/auth.php';

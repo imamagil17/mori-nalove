@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LogDeteksi;
-use App\Models\NotificationLog; // Wajib ditambahkan untuk catat riwayat notif
-use Illuminate\Support\Facades\Http; // Wajib ditambahkan untuk nembak API Telegram
+use App\Models\NotificationLog; 
+use Illuminate\Support\Facades\Http; 
 
 class LogController extends Controller
 {
@@ -26,12 +26,6 @@ class LogController extends Controller
             'status' => 'required|string',
             'nilai_level' => 'required|numeric',
             'sungai' => 'nullable|string',
-        ]);
-
-        // Simpan data log deteksi ke database
-        $log = LogDeteksi::create([
-            'status' => $request->status,
-            'nilai_level' => $request->nilai_level,
         ]);
 
         // ── DATABASE ATURAN AMBANG BATAS DINAMIS PER SUNGAI ──
@@ -66,6 +60,15 @@ class LogController extends Controller
         }
 
         // ====================================================
+        // --- PERBAIKAN: SIMPAN LOG DETEKSI SETELAH DIKONVERSI ---
+        // ====================================================
+        $log = LogDeteksi::create([
+            'nama_sungai' => $namaSungai,
+            'status'      => strtoupper($status), // Normalisasi string huruf besar
+            'nilai_level' => $nilaiCm,            // Disimpan sebagai CM untuk konsistensi analitik
+        ]);
+
+        // ====================================================
         // --- MULAI KODE OTOMATISASI TELEGRAM ---
         // ====================================================
         $shouldSend = in_array($status, ['SIAGA', 'BAHAYA']);
@@ -83,21 +86,6 @@ class LogController extends Controller
             $message .= "• Status Keamanan: " . $status . "\n";
             $message .= "• Waktu Kejadian: " . $waktu . "\n\n";
             $message .= "PERINTAH EVAKUASI: Dimohon kepada seluruh warga di sekitar aliran " . $namaSungai . " untuk tetap siaga dan bersiap evakuasi mandiri jika kondisi terus meningkat!";
-
-            // Simulasikan juga log upload video agar datanya terikat di table riwayat visual admin
-            try {
-                \App\Models\VideoUploadLog::create([
-                    'nama_sungai' => $namaSungai,
-                    'file_video' => 'camera_feed_simulation.mp4',
-                    'ukuran_file' => '0 MB',
-                    'waktu_rekaman' => now(),
-                    'nilai_level' => $nilaiCm,
-                    'status_kondisi' => $status,
-                    'keterangan' => 'Deteksi otomatis Canny Edge Camera aktif.'
-                ]);
-            } catch (\Exception $e) {
-                // Ignore
-            }
 
             try {
                 $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
@@ -130,7 +118,7 @@ class LogController extends Controller
     }
 
     // ====================================================
-    // --- TAMBAHAN BARU: FETCH NOTIFIKASI UNTUK MADING ---
+    // --- FETCH NOTIFIKASI UNTUK MADING ---
     // ====================================================
     public function notifications()
     {
@@ -142,4 +130,4 @@ class LogController extends Controller
             'data' => $notifs
         ]);
     }
-}   
+}

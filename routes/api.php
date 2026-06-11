@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LogController;
+use App\Http\Controllers\CitizenReportController;
 use App\Http\Controllers\Api\SensorController;
 
 /*
@@ -19,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/logs', [LogController::class, 'store']); 
+Route::post('/reports', [CitizenReportController::class, 'store']);
 Route::post('/sensor/kirim-data', [SensorController::class, 'store']);

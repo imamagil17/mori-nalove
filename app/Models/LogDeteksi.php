@@ -9,5 +9,5 @@ class LogDeteksi extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'nilai_level'];
+    protected $fillable = ['nama_sungai', 'status', 'nilai_level'];
 }
