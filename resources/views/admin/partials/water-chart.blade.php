@@ -1,7 +1,5 @@
 <div
     class="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-4 sm:p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md flex flex-col h-full flex-grow relative group w-full min-h-[480px]">
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.1/dist/chartjs-plugin-annotation.min.js">
-    </script>
 
     <div class="flex flex-col gap-4 mb-6 shrink-0 w-full">
 
@@ -28,10 +26,9 @@
             <span class="text-xs font-medium text-slate-400">Gunakan filter untuk memantau data historis sungai</span>
 
             <div class="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
-                <div class="relative flex-grow sm:flex-grow-0 w-full sm:w-48">
-                    <select id="riverSelect"
-                        onchange="updateChartByRiver(this.value); fetchAnalitikPrediksi(this.value);"
-                        class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3 pr-8 py-1.5 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none transition-all">
+                <div class="relative flex-grow sm:flex-grow-0 w-full sm:w-56">
+                    <select id="riverSelect" onchange="muatDataAI(this.value);"
+                        class="w-full bg-white border border-slate-200/80 shadow-sm rounded-xl pl-4 pr-10 py-2.5 text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer appearance-none transition-all hover:border-indigo-300">
                         <option value="Sungai Gumbasa" selected>Sungai Gumbasa</option>
                         <option value="Sungai Lariang">Sungai Lariang</option>
                         <option value="Sungai Lindu">Sungai Lindu</option>
@@ -45,14 +42,16 @@
                         <option value="Sungai Bangga">Sungai Bangga</option>
                     </select>
                     <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        <div class="p-1 bg-slate-50 rounded-lg">
+                            <i data-lucide="chevrons-up-down" class="w-3.5 h-3.5"></i>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="fetchDashboardData()"
-                    class="px-3 py-1.5 text-xs font-bold bg-slate-50 border border-slate-200 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl flex items-center gap-1.5 transition-colors shrink-0">
-                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="refreshIcon"></i>
-                    <span>Refresh Data</span>
+                <button onclick="refreshDataAI()"
+                    class="px-4 py-2.5 text-xs font-bold bg-white border border-slate-200/80 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 rounded-xl flex items-center gap-2 transition-all shadow-sm shrink-0 active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-4 h-4" id="refreshIcon"></i>
+                    <span class="hidden sm:inline-block">Refresh Data</span>
                 </button>
             </div>
         </div>

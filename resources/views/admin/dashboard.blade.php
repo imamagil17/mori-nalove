@@ -113,56 +113,190 @@
         window.onOpenCvReady = function() {
             console.log('OpenCV.js is ready.');
         };
-        lucide.createIcons();
-
-        // [PENEMPATAN FUNGSI ANALITIK PREDIKSI]
-        function fetchAnalitikPrediksi(sungaiTerpilih) {
-            fetch(`/api/analytics?sungai=${encodeURIComponent(sungaiTerpilih)}`)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success && result.data) {
-                        // Sinkronisasi ID elemen HTML sesuai dengan komponen ai-prediction-card.blade.php Anda
-                        const levelText = document.getElementById('predict-level-text') || document.getElementById(
-                            'level-prediksi-text');
-                        const statusBadge = document.getElementById('predict-status-badge') || document.getElementById(
-                            'status-prediksi-badge');
-                        const riskBar = document.getElementById('risk-score-bar') || document.getElementById(
-                            'progress-skor-risiko');
-
-                        if (levelText) {
-                            levelText.innerText = result.data.predicted_level + " cm";
-                        }
-
-                        if (statusBadge) {
-                            statusBadge.innerText = result.data.prediction_status;
-
-                            // Dinamisasi warna badge sesuai status dari backend
-                            if (result.data.prediction_status === 'BAHAYA') {
-                                statusBadge.className =
-                                    "px-2.5 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-700 border border-red-200";
-                            } else if (result.data.prediction_status === 'SIAGA') {
-                                statusBadge.className =
-                                    "px-2.5 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700 border border-orange-200";
-                            } else {
-                                statusBadge.className =
-                                    "px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200";
-                            }
-                        }
-
-                        if (riskBar) {
-                            riskBar.style.width = result.data.risk_score + "%";
-                        }
-                    }
-                })
-                .catch(error => console.error("Gagal memuat analitik prediksi:", error));
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
 
-        // Picu pemanggilan data awal saat halaman Command Center selesai dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            const riverSelect = document.getElementById('riverSelect');
-            if (riverSelect) {
-                fetchAnalitikPrediksi(riverSelect.value);
+        let waterChartInstance = null;
+
+        function initChart() {
+            const ctx = document.getElementById('waterChart').getContext('2d');
+            waterChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Tinggi Air (cm)',
+                        data: [],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#4f46e5',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        annotation: {
+                            annotations: {}
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 500
+                        }
+                    }
+                }
+            });
+        }
+
+        // NAMA FUNGSI BARU AGAR KEBAL DARI FILE LAMA
+        function muatDataAI(namaSungai) {
+            document.getElementById('chartSkeleton')?.classList.remove('hidden');
+            document.getElementById('chartContainer')?.classList.add('opacity-0');
+
+            fetch(`/api/analytics?sungai=${encodeURIComponent(namaSungai)}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Gagal terhubung ke API");
+                    return response.json();
+                })
+                .then(res => {
+                    if (res.success && res.data) {
+                        const data = res.data;
+
+                        // JIKA SUNGAI BELUM PUNYA DATA VIDEO SAMA SEKALI
+                        if (data.chart_data.length === 0) {
+                            if (waterChartInstance) {
+                                waterChartInstance.data.labels = ['Kosong'];
+                                waterChartInstance.data.datasets[0].data = [0];
+                                waterChartInstance.options.plugins.annotation.annotations = {};
+                                waterChartInstance.update();
+                            }
+                            document.getElementById('ai_level_air').innerText = '--';
+                            document.getElementById('ai_risk_score').innerText = '0';
+                            const elStatus = document.getElementById('ai_status_keamanan');
+                            if (elStatus) {
+                                elStatus.innerText = 'BELUM ADA DATA';
+                                elStatus.className =
+                                    'text-sm font-bold mt-1 px-2 py-0.5 rounded inline-block truncate max-w-full bg-slate-500 text-white';
+                            }
+                        }
+                        // JIKA DATA TERSEDIA, LUKIS GRAFIK!
+                        else {
+                            if (waterChartInstance) {
+                                waterChartInstance.data.labels = data.chart_labels;
+                                waterChartInstance.data.datasets[0].data = data.chart_data;
+
+                                waterChartInstance.options.plugins.annotation.annotations = {
+                                    lineAwas: {
+                                        type: 'line',
+                                        yMin: data.thresholds.bahaya,
+                                        yMax: data.thresholds.bahaya,
+                                        borderColor: '#ef4444',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'Batas AWAS',
+                                            display: true,
+                                            position: 'end',
+                                            backgroundColor: '#ef4444'
+                                        }
+                                    },
+                                    lineWaspada: {
+                                        type: 'line',
+                                        yMin: data.thresholds.siaga,
+                                        yMax: data.thresholds.siaga,
+                                        borderColor: '#f97316',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'Batas WASPADA',
+                                            display: true,
+                                            position: 'end',
+                                            backgroundColor: '#f97316'
+                                        }
+                                    },
+                                    lineSiaga: {
+                                        type: 'line',
+                                        yMin: data.thresholds.waspada,
+                                        yMax: data.thresholds.waspada,
+                                        borderColor: '#eab308',
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            content: 'Batas SIAGA',
+                                            display: true,
+                                            position: 'end',
+                                            backgroundColor: '#eab308'
+                                        }
+                                    }
+                                };
+
+                                waterChartInstance.options.scales.y.suggestedMax = data.thresholds.max;
+                                waterChartInstance.update();
+                            }
+
+                            // UPDATE KARTU AI
+                            document.getElementById('ai_level_air').innerText = data.current_level;
+                            document.getElementById('ai_risk_score').innerText = data.risk_score;
+
+                            const elStatus = document.getElementById('ai_status_keamanan');
+                            if (elStatus) {
+                                elStatus.innerText = data.prediction_status;
+                                if (data.prediction_status === 'AWAS' || data.prediction_status === 'BAHAYA') {
+                                    elStatus.className =
+                                        "text-sm font-bold mt-1 px-2 py-0.5 rounded inline-block truncate max-w-full bg-red-500 text-white";
+                                } else if (data.prediction_status === 'WASPADA') {
+                                    elStatus.className =
+                                        "text-sm font-bold mt-1 px-2 py-0.5 rounded inline-block truncate max-w-full bg-orange-500 text-white";
+                                } else {
+                                    elStatus.className =
+                                        "text-sm font-bold mt-1 px-2 py-0.5 rounded inline-block truncate max-w-full bg-emerald-500 text-white";
+                                }
+                            }
+                        }
+                    }
+                    tampilkanGrafik();
+                })
+                .catch(error => {
+                    console.error('Error memuat data:', error);
+                    tampilkanGrafik();
+                });
+        }
+
+        function tampilkanGrafik() {
+            setTimeout(() => {
+                document.getElementById('chartSkeleton')?.classList.add('hidden');
+                document.getElementById('chartContainer')?.classList.remove('opacity-0');
+            }, 300);
+        }
+
+        // FUNGSI BARU UNTUK TOMBOL REFRESH
+        function refreshDataAI() {
+            const sungai = document.getElementById('riverSelect').value;
+            muatDataAI(sungai);
+
+            const icon = document.getElementById('refreshIcon');
+            if (icon) {
+                icon.classList.add('animate-spin');
+                setTimeout(() => icon.classList.remove('animate-spin'), 1000);
             }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initChart();
+            const riverSelect = document.getElementById('riverSelect');
+            if (riverSelect) muatDataAI(riverSelect.value);
         });
     </script>
 
@@ -171,7 +305,7 @@
     <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();"></script>
 
     <script src="{{ asset('js/dashboard-api.js') }}"></script>
-    <script src="{{ asset('js/water-chart.js') }}"></script>
+
     <script src="{{ asset('js/chatbot.js') }}"></script>
     <script src="{{ asset('js/news-modal.js') }}"></script>
     <script src="{{ asset('js/citizen-reports.js') }}"></script>

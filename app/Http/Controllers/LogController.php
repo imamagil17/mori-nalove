@@ -30,30 +30,32 @@ class LogController extends Controller
 
         // ── DATABASE ATURAN AMBANG BATAS DINAMIS PER SUNGAI ──
         $thresholds = [
-            "Sungai Gumbasa" => [ 'waspada' => 250, 'siaga' => 350, 'bahaya' => 450, 'max' => 500 ],
-            "Sungai Lindu"    => [ 'waspada' => 300, 'siaga' => 390, 'bahaya' => 500, 'max' => 550 ],
-            "Sungai Lariang"  => [ 'waspada' => 400, 'siaga' => 550, 'bahaya' => 700, 'max' => 800 ],
-            "Sungai Pakuli"   => [ 'waspada' => 200, 'siaga' => 300, 'bahaya' => 400, 'max' => 450 ],
-            "Sungai Marawola" => [ 'waspada' => 180, 'siaga' => 270, 'bahaya' => 360, 'max' => 400 ],
-            "Sungai Palolo"   => [ 'waspada' => 220, 'siaga' => 320, 'bahaya' => 420, 'max' => 460 ],
-            "Sungai Kulawi"   => [ 'waspada' => 280, 'siaga' => 370, 'bahaya' => 470, 'max' => 520 ],
-            "Sungai Ngatabaru"=> [ 'waspada' => 160, 'siaga' => 230, 'bahaya' => 300, 'max' => 340 ],
-            "Sungai Wuno"     => [ 'waspada' => 170, 'siaga' => 250, 'bahaya' => 330, 'max' => 370 ],
-            "Sungai Bangga"   => [ 'waspada' => 240, 'siaga' => 340, 'bahaya' => 440, 'max' => 480 ],
-            "Sungai Samba"    => [ 'waspada' => 260, 'siaga' => 360, 'bahaya' => 460, 'max' => 500 ]
+            "Sungai Gumbasa" => [ 'siaga' => 250, 'waspada' => 350, 'awas' => 450, 'max' => 500 ],
+            "Sungai Lindu"    => [ 'siaga' => 300, 'waspada' => 390, 'awas' => 500, 'max' => 550 ],
+            "Sungai Lariang"  => [ 'siaga' => 400, 'waspada' => 550, 'awas' => 700, 'max' => 800 ],
+            "Sungai Pakuli"   => [ 'siaga' => 200, 'waspada' => 300, 'awas' => 400, 'max' => 450 ],
+            "Sungai Marawola" => [ 'siaga' => 180, 'waspada' => 270, 'awas' => 360, 'max' => 400 ],
+            "Sungai Palolo"   => [ 'siaga' => 220, 'waspada' => 320, 'awas' => 420, 'max' => 460 ],
+            "Sungai Kulawi"   => [ 'siaga' => 280, 'waspada' => 370, 'awas' => 470, 'max' => 520 ],
+            "Sungai Ngatabaru"=> [ 'siaga' => 160, 'waspada' => 230, 'awas' => 300, 'max' => 340 ],
+            "Sungai Wuno"     => [ 'siaga' => 170, 'waspada' => 250, 'awas' => 330, 'max' => 370 ],
+            "Sungai Bangga"   => [ 'siaga' => 240, 'waspada' => 340, 'awas' => 440, 'max' => 480 ],
+            "Sungai Samba"    => [ 'siaga' => 260, 'waspada' => 360, 'awas' => 460, 'max' => 500 ]
         ];
 
         $namaSungai = $request->input('sungai', 'Sungai Gumbasa');
         $levelPercentage = $request->nilai_level;
-        $rules = $thresholds[$namaSungai] ?? [ 'waspada' => 200, 'siaga' => 300, 'bahaya' => 400, 'max' => 450 ];
+        $rules = $thresholds[$namaSungai] ?? [ 'siaga' => 200, 'waspada' => 300, 'awas' => 400, 'max' => 450 ];
 
         // Konversi persentase (%) level air Canny Edge menjadi satuan centimeter (cm) berdasarkan max scale
         $nilaiCm = round(($levelPercentage / 100) * $rules['max']);
 
         // Klasifikasikan status keamanan centimeter dinamis
-        if ($nilaiCm >= $rules['bahaya']) {
-            $status = 'BAHAYA';
+        if ($nilaiCm >= $rules['awas']) {
+            $status = 'AWAS';
         } elseif ($nilaiCm >= $rules['waspada']) {
+            $status = 'WASPADA';
+        } elseif ($nilaiCm >= $rules['siaga']) {
             $status = 'SIAGA';
         } else {
             $status = 'NORMAL';
@@ -71,7 +73,7 @@ class LogController extends Controller
         // ====================================================
         // --- MULAI KODE OTOMATISASI TELEGRAM ---
         // ====================================================
-        $shouldSend = in_array($status, ['SIAGA', 'BAHAYA']);
+        $shouldSend = in_array($status, ['siaga', 'waspada', 'awas']);
 
         if ($shouldSend) {
             $token = env('TELEGRAM_BOT_TOKEN');
@@ -85,7 +87,7 @@ class LogController extends Controller
             $message .= "• Ketinggian Air: " . $nilaiCm . " cm\n";
             $message .= "• Status Keamanan: " . $status . "\n";
             $message .= "• Waktu Kejadian: " . $waktu . "\n\n";
-            $message .= "PERINTAH EVAKUASI: Dimohon kepada seluruh warga di sekitar aliran " . $namaSungai . " untuk tetap siaga dan bersiap evakuasi mandiri jika kondisi terus meningkat!";
+            $message .= "PERINTAH EVAKUASI: Dimohon kepada seluruh warga di sekitar aliran " . $namaSungai . " untuk tetap waspada dan bersiap evakuasi mandiri jika kondisi terus meningkat!";
 
             try {
                 $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [

@@ -42,72 +42,69 @@ class NotificationLogController extends Controller
         $namaSungai = $request->input('sungai', 'Sungai Gumbasa'); 
         $status = strtoupper($request->input('status', 'NORMAL'));
 
-        // =======================================================
-        // 🌟 SINKRONISASI THRESHOLD 11 SUNGAI (MAPPING SIMULASI)
-        // =======================================================
         $aturanSungai = [
-            'Sungai Gumbasa'   => ['BAHAYA' => [450, 520], 'SIAGA' => [350, 440], 'NORMAL' => [100, 240]],
-            'Sungai Lariang'   => ['BAHAYA' => [600, 700], 'SIAGA' => [450, 590], 'NORMAL' => [150, 340]],
-            'Sungai Lindu'     => ['BAHAYA' => [500, 580], 'SIAGA' => [390, 490], 'NORMAL' => [120, 290]],
-            'Sungai Samba'     => ['BAHAYA' => [400, 480], 'SIAGA' => [300, 390], 'NORMAL' => [80, 190]],
-            'Sungai Pakuli'    => ['BAHAYA' => [480, 560], 'SIAGA' => [360, 470], 'NORMAL' => [110, 250]],
-            'Sungai Marawola'  => ['BAHAYA' => [420, 490], 'SIAGA' => [320, 410], 'NORMAL' => [90, 210]],
-            'Sungai Palolo'    => ['BAHAYA' => [460, 530], 'SIAGA' => [340, 450], 'NORMAL' => [100, 230]],
-            'Sungai Kulawi'    => ['BAHAYA' => [520, 610], 'SIAGA' => [400, 510], 'NORMAL' => [130, 290]],
-            'Sungai Ngatabaru' => ['BAHAYA' => [430, 500], 'SIAGA' => [330, 420], 'NORMAL' => [95, 220]],
-            'Sungai Wuno'      => ['BAHAYA' => [410, 480], 'SIAGA' => [310, 400], 'NORMAL' => [85, 200]],
-            'Sungai Bangga'    => ['BAHAYA' => [470, 550], 'SIAGA' => [370, 460], 'NORMAL' => [105, 260]],
+            'Sungai Gumbasa'   => ['AWAS' => [450, 520], 'WASPADA' => [350, 449], 'SIAGA' => [150, 349], 'NORMAL' => [50, 149]],
+            'Sungai Lariang'   => ['AWAS' => [600, 700], 'WASPADA' => [450, 599], 'SIAGA' => [250, 449], 'NORMAL' => [50, 249]],
+            'Sungai Lindu'     => ['AWAS' => [500, 580], 'WASPADA' => [390, 499], 'SIAGA' => [190, 389], 'NORMAL' => [50, 189]],
+            'Sungai Samba'     => ['AWAS' => [400, 480], 'WASPADA' => [300, 399], 'SIAGA' => [100, 299], 'NORMAL' => [50, 99]],
+            'Sungai Pakuli'    => ['AWAS' => [480, 560], 'WASPADA' => [360, 479], 'SIAGA' => [160, 359], 'NORMAL' => [50, 159]],
+            'Sungai Marawola'  => ['AWAS' => [420, 490], 'WASPADA' => [320, 419], 'SIAGA' => [120, 319], 'NORMAL' => [50, 119]],
+            'Sungai Palolo'    => ['AWAS' => [460, 530], 'WASPADA' => [340, 459], 'SIAGA' => [140, 339], 'NORMAL' => [50, 139]],
+            'Sungai Kulawi'    => ['AWAS' => [520, 610], 'WASPADA' => [400, 519], 'SIAGA' => [200, 399], 'NORMAL' => [50, 199]],
+            'Sungai Ngatabaru' => ['AWAS' => [430, 500], 'WASPADA' => [330, 429], 'SIAGA' => [130, 329], 'NORMAL' => [50, 129]],
+            'Sungai Wuno'      => ['AWAS' => [410, 480], 'WASPADA' => [310, 409], 'SIAGA' => [110, 309], 'NORMAL' => [50, 109]],
+            'Sungai Bangga'    => ['AWAS' => [470, 550], 'WASPADA' => [370, 469], 'SIAGA' => [170, 369], 'NORMAL' => [50, 169]],
         ];
 
-        $defaultBatas = ['BAHAYA' => [450, 550], 'SIAGA' => [300, 440], 'NORMAL' => [50, 240]];
+        $defaultBatas = ['AWAS' => [450, 550], 'WASPADA' => [350, 449], 'SIAGA' => [250, 349], 'NORMAL' => [50, 249]];
         $batasSungai = $aturanSungai[$namaSungai] ?? $defaultBatas;
 
-        // Normalisasi teks input status agar masuk ke key mapping
-        if (in_array($status, ['WASPADA', 'SIAGA'])) {
-            $status = 'SIAGA';
-        } elseif (in_array($status, ['AWAS', 'MERAH', 'BAHAYA'])) {
-            $status = 'BAHAYA';
-        } else {
+        // Pastikan status yang diketik masuk ke dalam key yang benar
+        if (!in_array($status, ['AWAS', 'WASPADA', 'SIAGA', 'NORMAL'])) {
             $status = 'NORMAL';
         }
 
         $range = $batasSungai[$status];
         $nilaiCm = rand($range[0], $range[1]);
-        // =======================================================
 
-        // Format penanggalan disamakan murni (Waktu sistem uji tembak saat ini)
-        $waktuLapangan = now()->timezone('Asia/Makassar')->format('d M Y');
+        $waktuLapangan = now()->timezone('Asia/Makassar')->format('d M Y, H:i') . ' WITA';
         $waktuSistem = now()->timezone('Asia/Makassar')->format('d M Y, H:i') . ' WITA';
 
-        // =======================================================
-        // 🌟 REVISI MATANG: ISI STRING STRUKTUR PESAN TELEGRAM PER STATUS
-        // =======================================================
+        // PENYERAGAMAN TEKS TELEGRAM 4 LEVEL (Sama persis dengan VideoUpload)
         if ($status === 'NORMAL') {
-            $text = "🤖 *[SISTEM MONITORING MORI NALOVE - " . $namaSungai . "]*\n\n";
-            $text .= "Pemantauan berkala model YOLO berjalan lancar. Kondisi debit aliran air sungai saat ini berada di bawah ambang batas aman.\n\n";
-            $text .= "• Nama Sungai: " . $namaSungai . "\n";
+            $text = "🟢 *[SIMULASI UJI TEMBAK - " . $namaSungai . "]*\n\n";
+            $text .= "Pemantauan model YOLO berjalan lancar. Debit aliran air sungai berada di bawah ambang batas aman.\n\n";
             $text .= "• Ketinggian Air: " . $nilaiCm . " cm\n";
-            $text .= "• Status Keamanan: " . $status . "\n";
-            $text .= "• Tanggal Rekaman Lapangan: " . $waktuLapangan . "\n";
-            $text .= "• Waktu Broadcast Sistem: " . $waktuSistem . "\n";
+            $text .= "• Status Keamanan: NORMAL\n";
+            $text .= "• Waktu Rekaman: " . $waktuLapangan . "\n";
+            $text .= "• Waktu Broadcast: " . $waktuSistem;
+
         } elseif ($status === 'SIAGA') {
-            $text = "⚠️ *[PERINGATAN STATUS SIAGA - MORI NALOVE]*\n\n";
-            $text .= "Sistem mendeteksi adanya kenaikan volume air sungai melewati batas wajar pada titik pantau aktif:\n\n";
-            $text .= "• Nama Sungai: " . $namaSungai . "\n";
+            $text = "🟡 *[SIMULASI UJI TEMBAK: SIAGA - MORI NALOVE]*\n\n";
+            $text .= "Sistem mendeteksi adanya kenaikan volume air sungai. Harap pantau aktivitas sekitar:\n\n";
             $text .= "• Ketinggian Air: " . $nilaiCm . " cm\n";
-            $text .= "• Status Keamanan: " . $status . "\n";
-            $text .= "• Tanggal Rekaman Lapangan: " . $waktuLapangan . "\n";
-            $text .= "• Waktu Broadcast Sistem: " . $waktuSistem . "\n\n";
-            $text .= "*HIMBAUAN KEAMANAN:* Warga yang beraktivitas di sekitar sempadan aliran " . $namaSungai . " diminta meningkatkan kewaspadaan dan mengamankan barang berharga.";
-        } else { // BAHAYA
-            $text = "🚨 *[DARURAT STATUS BAHAYA - WARNING BANJIR MORI NALOVE]*\n\n";
-            $text .= "Sistem mendeteksi lonjakan ekstrem debit air yang berpotensi kuat memicu luapan banjir besar di area pemukiman sekitar:\n\n";
-            $text .= "• Nama Sungai: " . $namaSungai . "\n";
+            $text .= "• Status Keamanan: SIAGA\n";
+            $text .= "• Waktu Rekaman: " . $waktuLapangan . "\n";
+            $text .= "• Waktu Broadcast: " . $waktuSistem . "\n\n";
+            $text .= "*HIMBAUAN:* Kurangi aktivitas di sekitar sempadan aliran sungai.";
+
+        } elseif ($status === 'WASPADA') {
+            $text = "🟠 *[SIMULASI UJI TEMBAK: WASPADA - MORI NALOVE]*\n\n";
+            $text .= "Sistem mendeteksi debit air terus meningkat dan MENDEKATI BATAS BAHAYA:\n\n";
             $text .= "• Ketinggian Air: " . $nilaiCm . " cm\n";
-            $text .= "• Status Keamanan: " . $status . "\n";
-            $text .= "• Tanggal Rekaman Lapangan: " . $waktuLapangan . "\n";
-            $text .= "• Waktu Broadcast Sistem: " . $waktuSistem . "\n\n";
-            $text .= "*PERINTAH EVAKUASI:* Warga di sepanjang bantaran aliran " . $namaSungai . " diwajibkan segera mengungsi ke titik aman utama dan mengikuti instruksi tim evakuasi lapangan.";
+            $text .= "• Status Keamanan: WASPADA\n";
+            $text .= "• Waktu Rekaman: " . $waktuLapangan . "\n";
+            $text .= "• Waktu Broadcast: " . $waktuSistem . "\n\n";
+            $text .= "*PERHATIAN:* Warga diharapkan mengamankan barang berharga ke tempat tinggi dan bersiap evakuasi.";
+
+        } else { 
+            $text = "🚨 *[SIMULASI UJI TEMBAK: AWAS - WARNING BANJIR]*\n\n";
+            $text .= "Sistem mendeteksi lonjakan ekstrem debit air yang berpotensi kuat memicu LUAPAN BANJIR:\n\n";
+            $text .= "• Ketinggian Air: " . $nilaiCm . " cm\n";
+            $text .= "• Status Keamanan: AWAS\n";
+            $text .= "• Waktu Rekaman: " . $waktuLapangan . "\n";
+            $text .= "• Waktu Broadcast: " . $waktuSistem . "\n\n";
+            $text .= "*PERINTAH EVAKUASI:* Warga di bantaran aliran " . $namaSungai . " DIWAJIBKAN segera mengungsi ke titik aman!";
         }
 
         try {
@@ -118,17 +115,13 @@ class NotificationLogController extends Controller
             ]);
 
             if ($response->successful()) {
-
-                // Masukkan log ke tabel NotificationLog agar terdaftar di rekap log broadcast
                 NotificationLog::create([
                     'message' => $text,
                     'status' => 'Terkirim ✅',
                 ]);
-                
-                return redirect()->back()->with('success', 'Cek HP sekarang! Pesan simulasi Mori Nalove berhasil dikirim via Telegram.');
+                return redirect()->back()->with('success', 'Pesan simulasi Mori Nalove berhasil dikirim via Telegram.');
             } else {
-                $errorReason = $response->json('description') ?? 'Gagal merespons API Telegram';
-                return redirect()->back()->with('error', 'Gagal dari Telegram: ' . $errorReason);
+                return redirect()->back()->with('error', 'Gagal dari Telegram: ' . ($response->json('description') ?? 'Gagal respons'));
             }
 
         } catch (\Exception $e) {
