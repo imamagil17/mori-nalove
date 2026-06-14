@@ -125,7 +125,7 @@ class LogController extends Controller
     public function notifications()
     {
         // Mengambil 3 log notifikasi peringatan terakhir dari database
-        $notifs = NotificationLog::latest()->take(3)->get();
+        $notifs = NotificationLog::latest()->take(10)->get();
         
         return response()->json([
             'success' => true,

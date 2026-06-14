@@ -12,13 +12,20 @@
                 <h3 class="text-base font-black text-slate-800 tracking-tight whitespace-nowrap">Tren Ketinggian Air</h3>
             </div>
 
+            {{-- 🌟 LEGENDA INDIKATOR STATUS BARU (AWAS, WASPADA, SIAGA) --}}
             <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-semibold text-slate-500">
-                <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-red-500 rounded inline-block"></span>
-                    Batas Bahaya (90%)</span>
-                <span class="flex items-center gap-1.5"><span
-                        class="w-3 h-0.5 bg-orange-500 rounded inline-block"></span> Batas Siaga (80%)</span>
-                <span class="flex items-center gap-1.5"><span
-                        class="w-3 h-0.5 bg-emerald-500 rounded inline-block"></span> Batas Normal (60%)</span>
+                <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-0.5 bg-red-500 rounded inline-block"></span>
+                    Batas Awas
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-0.5 bg-orange-500 rounded inline-block"></span> 
+                    Batas Waspada
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-0.5 bg-emerald-500 rounded inline-block"></span> 
+                    Batas Siaga
+                </span>
             </div>
         </div>
 
@@ -57,6 +64,7 @@
         </div>
     </div>
 
+    {{-- Skeleton Loader --}}
     <div id="chartSkeleton"
         class="absolute inset-x-6 top-36 bottom-8 animate-pulse flex items-end justify-between gap-2 pb-8 z-0">
         <div class="w-full bg-slate-200 rounded-t h-1/4"></div>
@@ -69,6 +77,7 @@
         <div class="w-full bg-slate-200 rounded-t h-2/5"></div>
     </div>
 
+    {{-- Canvas Area Grafik Chart.js --}}
     <div class="w-full flex-grow relative opacity-0 transition-opacity duration-500 z-10 h-[320px] sm:h-[380px] xl:h-full"
         id="chartContainer">
         <div class="w-full h-full pb-2 min-h-[300px]">

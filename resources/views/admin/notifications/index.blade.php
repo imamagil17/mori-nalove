@@ -9,6 +9,7 @@
                     <p class="text-slate-500 mt-2">Pantau riwayat pesan peringatan dini yang dikirim otomatis oleh sistem ke grup Telegram warga.</p>
                 </div>
                 
+                {{-- Form Uji Tembak Simulasi --}}
                 <form action="{{ route('admin.notifications.test') }}" method="POST" class="w-full lg:w-auto bg-white/40 backdrop-blur-md border border-white/50 rounded-2xl p-4 flex flex-col sm:flex-row items-end gap-3.5 shadow-sm shrink-0 transition-all duration-300 hover:bg-white/60 hover:shadow-md">
                     @csrf
                     <div class="w-full sm:w-44">
@@ -38,9 +39,9 @@
                         <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tingkat Status</label>
                         <div class="relative">
                             <select name="status" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3 pr-8 py-2 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer appearance-none transition-all" required>
-                                <option value="Siaga">Siaga</option>
-                                <option value="Bahaya" selected>Bahaya</option>
-                                <option value="Normal">Normal</option>
+                                <option value="Normal" selected>Siaga (Aman)</option>
+                                <option value="Siaga">Waspada</option>
+                                <option value="Bahaya">Awas (Darurat)</option>
                             </select>
                             <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -69,6 +70,7 @@
                 </div>
             @endif
 
+            {{-- Tabel Riwayat Rekap Log --}}
             <div class="bg-white/40 backdrop-blur-md border border-white/50 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:bg-white/60 hover:shadow-md overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
                     <h3 class="text-xl font-bold text-slate-800">Riwayat Broadcast Sistem</h3>
@@ -100,7 +102,7 @@
                             <tr class="text-slate-800 text-sm">
                                 <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/4">Waktu Penyiaran</th>
                                 <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/2">Isi Pesan Peringatan</th>
-                                <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/4 text-center">Status API</th>
+                                <th class="py-4 px-6 text-slate-800 font-black text-xs uppercase tracking-wider w-1/4 text-center">Status Keamanan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-sm">
@@ -114,25 +116,41 @@
                                     </td>
                                     <td class="py-4 px-6 text-slate-700 font-medium whitespace-pre-line leading-relaxed">
                                         @if($currentStatus === 'NORMAL' || $currentStatus === 'AMAN')
-                                            🤖 <span class="font-extrabold text-emerald-600">[SISTEM MONITORING - {{ $log->nama_sungai }}]</span>
+                                            🟢 <span class="font-extrabold text-emerald-600">[SIAGA - {{ $log->nama_sungai }}]</span>
                                             Pemantauan otomatis model YOLO & OpenCV berjalan dengan normal. Kondisi aliran sungai saat ini terpantau aman di bawah ambang batas.
+                                        @elseif($currentStatus === 'SIAGA')
+                                            🟡 <span class="font-extrabold text-amber-500">[WASPADA - {{ $log->nama_sungai }}]</span>
+                                            Sistem Mori Nalove mendeteksi adanya kenaikan volume air sungai melewati batas wajar pada titik pantau aktif.
                                         @else
-                                            🚨 <span class="font-extrabold text-rose-600">[DARURAT STATUS {{ $currentStatus }} - WARNING BANJIR]</span>
-                                            Sistem Mori Nalove mendeteksi kondisi darurat pada lokasi pemantauan aktif.
+                                            🚨 🔴 <span class="font-extrabold text-rose-600">[AWAS - {{ $log->nama_sungai }}]</span>
+                                            Sistem Mori Nalove mendeteksi lonjakan ekstrem debit air yang berpotensi kuat memicu luapan banjir besar di area pemukiman sekitar.
                                         @endif
-                                        • Nama Sungai: {{ $log->nama_sungai }}
-                                        • Waktu Deteksi: {{ \Carbon\Carbon::parse($log->waktu_rekaman)->format('H:i') }} WITA
-                                        • Ketinggian Air: {{ $log->nilai_level }} cm
-                                        • Status Keamanan: {{ $currentStatus }}
-                                        @if($currentStatus !== 'NORMAL' && $currentStatus !== 'AMAN')
-                                            
-                                        *PERINTAH EVAKUASI:* Warga di sekitar aliran {{ $log->nama_sungai }} diharap tetap siaga dan bersiap melakukan evakuasi mandiri jika kondisi terus meningkat.
+                                        
+                                        <div class="mt-2 pt-2 border-t border-slate-100/60 text-xs text-slate-500 space-y-0.5">
+                                            <p>• Waktu Deteksi: {{ \Carbon\Carbon::parse($log->waktu_rekaman)->format('H:i') }} WITA</p>
+                                            <p>• Ketinggian Air: <span class="font-bold text-slate-700">{{ $log->nilai_level }} cm</span></p>
+                                        </div>
+
+                                        @if($currentStatus === 'SIAGA')
+                                            <p class="mt-2 text-xs text-amber-700 bg-amber-50 rounded-lg p-2 border border-amber-100">⚠️ *HIMBAUAN KEAMANAN:* Warga yang beraktivitas di sekitar sempadan aliran diminta meningkatkan kewaspadaan dan mengamankan barang berharga.</p>
+                                        @elseif($currentStatus !== 'NORMAL' && $currentStatus !== 'AMAN')
+                                            <p class="mt-2 text-xs text-rose-700 bg-rose-50 rounded-lg p-2 border border-rose-100">🚨 *PERINTAH EVAKUASI:* Warga di sepanjang bantaran aliran diwajibkan segera mengungsi ke titik aman utama dan mengikuti instruksi tim evakuasi lapangan.</p>
                                         @endif
                                     </td>
                                     <td class="py-4 px-6 text-center">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100/70 text-emerald-700">
-                                            Terkirim ✅
-                                        </span>
+                                        @if($currentStatus === 'NORMAL' || $currentStatus === 'AMAN')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 shadow-sm border border-emerald-200">
+                                                SIAGA
+                                            </span>
+                                        @elseif($currentStatus === 'SIAGA')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 shadow-sm border border-amber-200">
+                                                WASPADA
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 shadow-sm border border-rose-200 animate-pulse">
+                                                AWAS
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

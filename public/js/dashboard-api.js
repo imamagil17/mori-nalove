@@ -9,6 +9,7 @@ async function fetchNotificationHistory() {
         if (!container) return;
         
         if (json.success && json.data.length > 0) {
+            // Me-render seluruh data yang dikirim oleh backend API Laravel tanpa potongan
             container.innerHTML = json.data.map(item => `
                 <div class="flex items-start gap-3 p-3 bg-slate-50/60 rounded-2xl border border-slate-100">
                     <div class="p-2 bg-rose-100 text-rose-600 rounded-xl mt-0.5">
@@ -94,7 +95,8 @@ async function fetchDashboardData() {
             const aiCont = document.getElementById('aiContent');
             if(aiCont) aiCont.classList.remove('hidden');
 
-            window.globalContext = `Saat ini Level Air ${d.current_level}%. Prediksi 30 menit ke depan: ${d.predicted_level}% (${d.prediction_status}). Cuaca: ${weatherDesc}. Skor Risiko: ${d.risk_score}/100.`;
+            // 🟢 FIXED: Mengubah satuan % menjadi cm agar sinkron dengan skala 500 cm riil penelitianmu
+            window.globalContext = `Saat ini Level Air ${d.current_level} cm. Prediksi 30 menit ke depan: ${d.predicted_level} cm (${d.prediction_status}). Cuaca: ${weatherDesc}. Skor Risiko: ${d.risk_score}/100.`;
 
             if (typeof updateUserStatusPanel === 'function') {
                 updateUserStatusPanel(d.current_level, d.prediction_status);
