@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\VideoUploadLog;
-use App\Models\NotificationLog; // Log broadcast tercatat di halaman notifikasi
+use App\Models\NotificationLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http; 
 use Illuminate\Support\Facades\Log;  
